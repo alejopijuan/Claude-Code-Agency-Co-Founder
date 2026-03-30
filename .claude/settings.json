@@ -1,20 +1,4 @@
 {
-  "permissions": {
-    "allow": [
-      "Edit",
-      "Write",
-      "Read",
-      "Glob",
-      "Grep",
-      "Bash(node:*)",
-      "Bash(find:*)",
-      "Bash(ls:*)",
-      "Bash(cat:*)",
-      "Bash(mkdir:*)",
-      "Bash(test:*)",
-      "Bash(wc:*)"
-    ]
-  },
   "hooks": {
     "SessionStart": [
       {
