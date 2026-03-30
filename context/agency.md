@@ -13,6 +13,7 @@ last_updated: "{{today}}"
 
 - **Name:** {{agency_name}}
 - **Tagline:** {{tagline}}
+- **Core Offering:** {{core_offering}}
 - **Niche:** {{niche}}
 - **Stage:** {{stage}}
 

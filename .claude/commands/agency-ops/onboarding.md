@@ -43,11 +43,16 @@ Present these options:
 
 This answer determines the depth of subsequent questions.
 
-## Stage 2: Core Identity (2-3 questions, then GENERATE)
+## Stage 2: Core Identity (3-4 questions, then GENERATE)
 
 Ask about:
 1. **Agency name** -- What's your agency called? (If starting out, suggest they pick a working name -- they can always change it later with `--reset`)
-2. **Niche focus** -- What industries are you targeting? Common niches: dental, roofing, med spa, law firms, HVAC, or "exploring multiple"
+2. **Core offering** -- What's the core of your business? Present options:
+   - **Voice AI systems** -- Speed-to-lead, after-hours inbound, database reactivation
+   - **Broader AI automation** -- Voice + workflows, n8n systems, chatbots, integrations
+   - **AI consulting / audits** -- Process audits, AI readiness assessments, implementation roadmaps
+   - **Still figuring it out** -- Exploring what resonates
+3. **Niche focus** -- What industries are you targeting? Common niches: dental, roofing, med spa, law firms, HVAC, or "exploring multiple"
 
 After receiving these two answers, IMMEDIATELY use the `Write` tool to generate `context/agency.md` with the user's answers and sensible defaults for all remaining fields. Show the user a brief summary of what was created:
 - Agency name and niche
@@ -116,6 +121,7 @@ When generating `context/agency.md`, use these defaults for any field the user h
 | Field | Default |
 |-------|---------|
 | agency_name | "My Voice AI Agency" |
+| core_offering | "Voice AI systems" |
 | niche | "exploring" |
 | stage | "starting-out" |
 | services | "Voice AI solutions" |
