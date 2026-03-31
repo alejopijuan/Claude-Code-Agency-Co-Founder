@@ -195,3 +195,23 @@ After generating the follow-up output:
 3. Entry format: `- [{category}] {learning} (from: {client}, {date})`
 4. Categories: `Preference` (style/format choices), `Situational` (client-specific patterns), `Pruned` (outdated entries removed)
 5. Check max_entries: if learnings.md exceeds 30 entries, prune the oldest `Situational` entries first, then oldest `Preference` entries
+
+## Supabase Sync
+
+After updating the client file and completing learnings updates:
+
+1. Read `supabase_url` and `supabase_anon_key` from `context/agency.md` frontmatter (already read at the start of this skill).
+2. If either field is missing, empty, or contains `{{`, skip this section entirely.
+3. Construct a JSON object with the client's name (for matching) and the updated fields: last_updated, open_commitments_count, next_meeting_date. If status was changed during follow-up, include status as well.
+4. Use Bash to execute:
+   ```
+   curl -s -L -X POST "{supabase_url}/rest/v1/clients" \
+     -H "apikey: {supabase_anon_key}" \
+     -H "Authorization: Bearer {supabase_anon_key}" \
+     -H "Content-Type: application/json" \
+     -H "Prefer: resolution=merge-duplicates" \
+     -d '{json_object}'
+   ```
+5. If curl fails, show brief note: "Dashboard sync skipped -- client updates are saved in markdown." Continue normally. Do NOT retry.
+
+Refer to `.claude/commands/agency-ops/setup-dashboard/references/dual-write-guide.md` for full details on the Supabase sync pattern.

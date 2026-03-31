@@ -188,3 +188,25 @@ After generating pipeline output:
    - Place under **Preferences** (display format, stages, metrics) or **Situational** (deal-specific patterns, industry conversion benchmarks).
 3. Check `max_entries` (30) -- if at the limit, move the oldest entry to **Pruned** or remove it.
 4. Write the updated `learnings.md` back to disk.
+
+## Supabase Sync
+
+After completing all file writes and learnings updates above:
+
+1. Read `supabase_url` and `supabase_anon_key` from `context/agency.md` frontmatter (already read at step 1 of Rules).
+2. If either field is missing, empty, or contains `{{`, skip this section entirely.
+3. Sync is needed after `add` and `move` actions only (not `status` or `metrics` which are read-only).
+4. For `add`: construct JSON from the new deal's frontmatter fields: name, contact, outreach_file, stage, niche, value, next_action, created, last_updated. POST to `{supabase_url}/rest/v1/deals`.
+5. For `move`: construct JSON with the deal's updated fields (name for matching, plus stage and last_updated). POST to `{supabase_url}/rest/v1/deals` with `Prefer: resolution=merge-duplicates`.
+6. Use Bash with:
+   ```
+   curl -s -L -X POST "{supabase_url}/rest/v1/deals" \
+     -H "apikey: {supabase_anon_key}" \
+     -H "Authorization: Bearer {supabase_anon_key}" \
+     -H "Content-Type: application/json" \
+     -H "Prefer: resolution=merge-duplicates" \
+     -d '{json_object}'
+   ```
+7. If curl fails, show brief note: "Dashboard sync skipped -- your pipeline data is saved in markdown." Continue normally. Do NOT retry.
+
+Refer to `.claude/commands/agency-ops/setup-dashboard/references/dual-write-guide.md` for full details on the Supabase sync pattern.

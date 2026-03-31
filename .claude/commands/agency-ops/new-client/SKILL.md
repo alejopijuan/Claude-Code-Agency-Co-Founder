@@ -90,3 +90,23 @@ After collecting the required answers:
    - "Run `/agency-ops:client-briefing {client-name}` to generate your first briefing"
    - "Run `/agency-ops:meeting-prep {client-name}` before your next meeting"
    - "You can always edit `context/clients/{filename}.md` directly to add more details"
+
+## Supabase Sync
+
+After generating the client file and completing all steps above:
+
+1. Read `supabase_url` and `supabase_anon_key` from `context/agency.md` frontmatter (already read at the start of this skill).
+2. If either field is missing, empty, or contains `{{`, skip this section entirely.
+3. Construct a JSON object from the new client file's YAML frontmatter fields: name, industry, status, monthly_value, start_date, meeting_cadence, last_updated, staleness_threshold_days, open_commitments_count, next_meeting_date.
+4. Use Bash to execute:
+   ```
+   curl -s -L -X POST "{supabase_url}/rest/v1/clients" \
+     -H "apikey: {supabase_anon_key}" \
+     -H "Authorization: Bearer {supabase_anon_key}" \
+     -H "Content-Type: application/json" \
+     -H "Prefer: resolution=merge-duplicates" \
+     -d '{json_object}'
+   ```
+5. If curl fails, show brief note: "Dashboard sync skipped -- your client data is saved in markdown." Continue normally. Do NOT retry.
+
+Refer to `.claude/commands/agency-ops/setup-dashboard/references/dual-write-guide.md` for full details on the Supabase sync pattern.

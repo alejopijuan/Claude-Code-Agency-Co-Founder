@@ -182,3 +182,23 @@ After completing any outreach action, check if there are useful patterns to reco
 - If a situational insight emerged (what works for their niche, best times to reach out), add it to the Situational section
 - Keep total entries under 30 (prune oldest Situational entries if needed)
 - Write updated learnings.md back
+
+## Supabase Sync
+
+After completing all file writes and learnings updates above:
+
+1. Read the `supabase_url` and `supabase_anon_key` fields from the `context/agency.md` YAML frontmatter (already read at step 1 of Rules).
+2. If either field is missing, empty, or contains `{{`, skip this section entirely. The skill is complete.
+3. If both are present, construct a JSON object from the lead file's YAML frontmatter fields: name, company, channel, stage, source, last_contact, next_follow_up.
+4. Use Bash to execute:
+   ```
+   curl -s -L -X POST "{supabase_url}/rest/v1/leads" \
+     -H "apikey: {supabase_anon_key}" \
+     -H "Authorization: Bearer {supabase_anon_key}" \
+     -H "Content-Type: application/json" \
+     -H "Prefer: resolution=merge-duplicates" \
+     -d '{json_object}'
+   ```
+5. If the curl fails or returns an error response, show a brief note: "Dashboard sync skipped -- your outreach data is saved in markdown." Continue normally. Do NOT retry.
+
+Refer to `.claude/commands/agency-ops/setup-dashboard/references/dual-write-guide.md` for full details on the Supabase sync pattern.

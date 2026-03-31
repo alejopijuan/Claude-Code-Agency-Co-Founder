@@ -82,12 +82,4 @@ voice-ai-agency-ops-hub/
     clients/
       _template.md                 # Client file template
       _example-client-sunrise-dental.md  # Fictional example
-    outreach/                      # Outreach lead tracking
-    pipeline/                      # Deal pipeline tracking
-    sops/                          # Standard operating procedures
-  templates/
-    voice-agents/                  # Platform-agnostic voice agent designs
-    systems/                       # n8n architecture guides
-    lead-gen/                      # Lead generation pipeline templates
-    proposals/                     # SOW, service agreement, onboarding checklist
 ```
