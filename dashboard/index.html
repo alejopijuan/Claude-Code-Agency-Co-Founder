@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agency Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    .chart-container { position: relative; height: 300px; }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <!-- Demo Banner -->
+  <div id="demo-banner" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 text-center text-sm">
+    Viewing sample data &mdash; run <code class="bg-white/20 px-2 py-0.5 rounded text-xs font-mono">/agency-ops:setup-dashboard</code> to connect your real data
+  </div>
+
+  <!-- Header -->
+  <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+    <h1 class="text-xl font-bold text-gray-900">Agency Dashboard</h1>
+    <button onclick="initDashboard()" class="text-sm text-blue-600 hover:text-blue-800 font-medium px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors">
+      Refresh Data
+    </button>
+  </header>
+
+  <!-- Tab Bar -->
+  <nav class="bg-white border-b border-gray-200 px-6 overflow-x-auto">
+    <div class="flex space-x-8 -mb-px">
+      <button data-tab="overview" onclick="switchTab('overview')" class="tab-btn border-b-2 border-blue-500 text-blue-600 px-1 py-3 text-sm font-medium whitespace-nowrap">Overview</button>
+      <button data-tab="outreach" onclick="switchTab('outreach')" class="tab-btn border-b-2 border-transparent text-gray-500 hover:text-gray-700 px-1 py-3 text-sm font-medium whitespace-nowrap">Outreach</button>
+      <button data-tab="pipeline" onclick="switchTab('pipeline')" class="tab-btn border-b-2 border-transparent text-gray-500 hover:text-gray-700 px-1 py-3 text-sm font-medium whitespace-nowrap">Pipeline</button>
+      <button data-tab="clients" onclick="switchTab('clients')" class="tab-btn border-b-2 border-transparent text-gray-500 hover:text-gray-700 px-1 py-3 text-sm font-medium whitespace-nowrap">Clients</button>
+    </div>
+  </nav>
+
+  <!-- Tab Content -->
+  <main class="max-w-7xl mx-auto px-6 py-6">
+
+    <!-- Overview Tab -->
+    <div data-tab-content="overview">
+      <div id="overview-content"></div>
+      <div id="overview-empty" class="hidden text-center py-16 text-gray-400">
+        <p class="text-lg mb-2">No data yet</p>
+        <p class="text-sm">Start by running <code class="bg-gray-100 px-2 py-0.5 rounded text-gray-600">/agency-ops:outreach add</code> or <code class="bg-gray-100 px-2 py-0.5 rounded text-gray-600">/agency-ops:new-client</code></p>
+      </div>
+    </div>
+
+    <!-- Outreach Tab -->
+    <div data-tab-content="outreach" class="hidden">
+      <div id="outreach-content"></div>
+      <div id="outreach-empty" class="hidden text-center py-16 text-gray-400">
+        <p class="text-lg mb-2">No outreach data yet</p>
+        <p class="text-sm">Run <code class="bg-gray-100 px-2 py-0.5 rounded text-gray-600">/agency-ops:outreach add &lt;name&gt;</code> to start tracking leads.</p>
+      </div>
+    </div>
+
+    <!-- Pipeline Tab -->
+    <div data-tab-content="pipeline" class="hidden">
+      <div id="pipeline-content"></div>
+      <div id="pipeline-empty" class="hidden text-center py-16 text-gray-400">
+        <p class="text-lg mb-2">No pipeline data yet</p>
+        <p class="text-sm">Run <code class="bg-gray-100 px-2 py-0.5 rounded text-gray-600">/agency-ops:pipeline add</code> to start tracking deals.</p>
+      </div>
+    </div>
+
+    <!-- Clients Tab -->
+    <div data-tab-content="clients" class="hidden">
+      <div id="clients-content"></div>
+      <div id="clients-empty" class="hidden text-center py-16 text-gray-400">
+        <p class="text-lg mb-2">No clients yet</p>
+        <p class="text-sm">Run <code class="bg-gray-100 px-2 py-0.5 rounded text-gray-600">/agency-ops:new-client</code> to add your first client.</p>
+      </div>
+    </div>
+
+  </main>
+
+<script>
+// ============================================================
+// Helpers
+// ============================================================
+
+function daysAgo(n) {
+  const d = new Date();
+  d.setDate(d.getDate() - n);
+  return d.toISOString().split('T')[0];
+}
+
+function daysFromNow(n) {
+  const d = new Date();
+  d.setDate(d.getDate() + n);
+  return d.toISOString().split('T')[0];
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '—';
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function formatCurrency(val) {
+  return '$' + Number(val || 0).toLocaleString();
+}
+
+// ============================================================
+// Demo Data Generators
+// ============================================================
+
+function generateDemoLeads() {
+  return [
+    { name: 'Sarah Mitchell', company: 'Bright Smile Dental', channel: 'linkedin', stage: 'closed', source: 'Google Maps', last_contact: daysAgo(1), next_follow_up: null },
+    { name: 'James Carter', company: 'Carter Law Group', channel: 'email', stage: 'proposal', source: 'Referral', last_contact: daysAgo(2), next_follow_up: daysFromNow(1) },
+    { name: 'Maria Lopez', company: 'Lopez Auto Group', channel: 'linkedin', stage: 'discovery', source: 'Google Maps', last_contact: daysAgo(3), next_follow_up: daysFromNow(2) },
+    { name: 'David Kim', company: 'Peak Chiropractic', channel: 'instagram', stage: 'call-booked', source: 'Instagram DM', last_contact: daysAgo(1), next_follow_up: daysFromNow(1) },
+    { name: 'Rachel Green', company: 'Evergreen Dental', channel: 'email', stage: 'replied', source: 'Google Maps', last_contact: daysAgo(4), next_follow_up: daysFromNow(3) },
+    { name: 'Tom Wright', company: 'Wright & Associates', channel: 'phone', stage: 'replied', source: 'Referral', last_contact: daysAgo(2), next_follow_up: daysFromNow(2) },
+    { name: 'Amanda Chen', company: 'Chen Family Dental', channel: 'linkedin', stage: 'messaged', source: 'Google Maps', last_contact: daysAgo(5), next_follow_up: daysFromNow(4) },
+    { name: 'Brian Foster', company: 'Foster Legal', channel: 'email', stage: 'messaged', source: 'Cold email', last_contact: daysAgo(6), next_follow_up: daysFromNow(3) },
+    { name: 'Linda Torres', company: 'Torres Chiropractic', channel: 'whatsapp', stage: 'messaged', source: 'Local event', last_contact: daysAgo(3), next_follow_up: daysFromNow(5) },
+    { name: 'Kevin Patel', company: 'Patel Auto Sales', channel: 'linkedin', stage: 'new-lead', source: 'Google Maps', last_contact: daysAgo(7), next_follow_up: daysFromNow(6) },
+    { name: 'Jennifer Adams', company: 'Adams Dental Care', channel: 'instagram', stage: 'new-lead', source: 'Instagram', last_contact: daysAgo(8), next_follow_up: daysFromNow(5) },
+    { name: 'Mark Sullivan', company: 'Sullivan Motors', channel: 'email', stage: 'new-lead', source: 'Google Maps', last_contact: daysAgo(10), next_follow_up: daysFromNow(7) },
+  ];
+}
+
+function generateDemoDeals() {
+  return [
+    { name: 'Bright Smile Dental - Speed to Lead', contact: 'Sarah Mitchell', niche: 'dental', stage: 'closed', value: 1500, next_action: 'Schedule onboarding call', created: daysAgo(30), last_updated: daysAgo(1) },
+    { name: 'Carter Law Group - Intake Agent', contact: 'James Carter', niche: 'legal', stage: 'proposal', value: 2000, next_action: 'Send revised SOW', created: daysAgo(14), last_updated: daysAgo(2) },
+    { name: 'Lopez Auto Group - Service Reminder', contact: 'Maria Lopez', niche: 'automotive', stage: 'discovery', value: 1200, next_action: 'Discovery call Thursday', created: daysAgo(10), last_updated: daysAgo(3) },
+    { name: 'Peak Chiropractic - Recall Agent', contact: 'David Kim', niche: 'chiropractic', stage: 'call-booked', value: 800, next_action: 'Intro call Monday', created: daysAgo(5), last_updated: daysAgo(1) },
+    { name: 'Evergreen Dental - After Hours', contact: 'Rachel Green', niche: 'dental', stage: 'replied', value: 2500, next_action: 'Follow up on interest', created: daysAgo(7), last_updated: daysAgo(4) },
+  ];
+}
+
+function generateDemoClients() {
+  return [
+    { name: 'Sunrise Dental', industry: 'dental', status: 'active', monthly_value: 1500, start_date: daysAgo(50), meeting_cadence: 'biweekly', last_updated: daysAgo(6), staleness_threshold_days: 14, open_commitments_count: 2, next_meeting_date: daysFromNow(3) },
+    { name: 'Metro Legal Partners', industry: 'legal', status: 'active', monthly_value: 2000, start_date: daysAgo(90), meeting_cadence: 'weekly', last_updated: daysAgo(18), staleness_threshold_days: 14, open_commitments_count: 1, next_meeting_date: daysFromNow(5) },
+    { name: 'Valley Auto Group', industry: 'automotive', status: 'active', monthly_value: 1200, start_date: daysAgo(120), meeting_cadence: 'biweekly', last_updated: daysAgo(35), staleness_threshold_days: 14, open_commitments_count: 0, next_meeting_date: null },
+  ];
+}
+
+// ============================================================
+// DataSource Abstraction
+// ============================================================
+
+const DataSource = {
+  mode: 'demo',
+  supabase: null,
+
+  async init() {
+    const url = localStorage.getItem('supabase_url');
+    const key = localStorage.getItem('supabase_anon_key');
+    if (url && key) {
+      try {
+        this.supabase = window.supabase.createClient(url, key);
+        const { error } = await this.supabase.from('leads').select('id').limit(1);
+        if (!error) this.mode = 'supabase';
+        else console.warn('Supabase query failed, using demo data:', error.message);
+      } catch (e) {
+        console.warn('Supabase init failed, using demo data:', e.message);
+      }
+    }
+  },
+
+  async getLeads() {
+    if (this.mode === 'demo') return generateDemoLeads();
+    const { data, error } = await this.supabase.from('leads').select('*').order('last_contact', { ascending: false });
+    return error ? generateDemoLeads() : data;
+  },
+
+  async getDeals() {
+    if (this.mode === 'demo') return generateDemoDeals();
+    const { data, error } = await this.supabase.from('deals').select('*').order('last_updated', { ascending: false });
+    return error ? generateDemoDeals() : data;
+  },
+
+  async getClients() {
+    if (this.mode === 'demo') return generateDemoClients();
+    const { data, error } = await this.supabase.from('clients').select('*').order('name', { ascending: true });
+    return error ? generateDemoClients() : data;
+  }
+};
+
+// ============================================================
+// Stage Helpers
+// ============================================================
+
+const STAGES = ['new-lead', 'messaged', 'replied', 'call-booked', 'discovery', 'proposal', 'closed'];
+
+const STAGE_LABELS = {
+  'new-lead': 'New Lead', 'messaged': 'Messaged', 'replied': 'Replied',
+  'call-booked': 'Call Booked', 'discovery': 'Discovery', 'proposal': 'Proposal', 'closed': 'Closed'
+};
+
+const STAGE_COLORS = {
+  'new-lead':    { bg: 'bg-gray-100',    text: 'text-gray-800',    chart: 'rgb(100, 116, 139)' },
+  'messaged':    { bg: 'bg-blue-100',    text: 'text-blue-800',    chart: 'rgb(59, 130, 246)' },
+  'replied':     { bg: 'bg-emerald-100', text: 'text-emerald-800', chart: 'rgb(16, 185, 129)' },
+  'call-booked': { bg: 'bg-amber-100',   text: 'text-amber-800',   chart: 'rgb(245, 158, 11)' },
+  'discovery':   { bg: 'bg-orange-100',  text: 'text-orange-800',  chart: 'rgb(249, 115, 22)' },
+  'proposal':    { bg: 'bg-purple-100',  text: 'text-purple-800',  chart: 'rgb(139, 92, 246)' },
+  'closed':      { bg: 'bg-green-100',   text: 'text-green-800',   chart: 'rgb(34, 197, 94)' },
+};
+
+function stageBadge(stage) {
+  const c = STAGE_COLORS[stage] || STAGE_COLORS['new-lead'];
+  return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${c.bg} ${c.text}">${STAGE_LABELS[stage] || stage}</span>`;
+}
+
+function stageIndex(stage) {
+  return STAGES.indexOf(stage);
+}
+
+// ============================================================
+// Health Calculation
+// ============================================================
+
+function getHealth(client) {
+  if (!client.last_updated) return 'at-risk';
+  const lastUpdated = new Date(client.last_updated + 'T00:00:00');
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const daysSince = Math.floor((today - lastUpdated) / (1000 * 60 * 60 * 24));
+  const threshold = client.staleness_threshold_days || 14;
+  if (daysSince <= threshold) return 'good';
+  if (daysSince <= threshold * 2) return 'attention';
+  return 'at-risk';
+}
+
+const HEALTH_CONFIG = {
+  'good':      { dot: 'bg-green-500',  label: 'Good',      text: 'text-green-700' },
+  'attention': { dot: 'bg-yellow-500', label: 'Attention',  text: 'text-yellow-700' },
+  'at-risk':   { dot: 'bg-red-500',    label: 'At Risk',    text: 'text-red-700' },
+};
+
+// ============================================================
+// Tab Navigation
+// ============================================================
+
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    const isActive = btn.getAttribute('data-tab') === tabName;
+    btn.classList.toggle('border-blue-500', isActive);
+    btn.classList.toggle('text-blue-600', isActive);
+    btn.classList.toggle('border-transparent', !isActive);
+    btn.classList.toggle('text-gray-500', !isActive);
+  });
+  document.querySelectorAll('[data-tab-content]').forEach(el => {
+    el.classList.toggle('hidden', el.getAttribute('data-tab-content') !== tabName);
+  });
+}
+
+// ============================================================
+// Render Functions
+// ============================================================
+
+function renderOverview(leads, deals, clients) {
+  const container = document.getElementById('overview-content');
+  const empty = document.getElementById('overview-empty');
+
+  if (!leads.length && !deals.length && !clients.length) {
+    container.classList.add('hidden');
+    empty.classList.remove('hidden');
+    return;
+  }
+  container.classList.remove('hidden');
+  empty.classList.add('hidden');
+
+  const messagesSent = leads.filter(l => stageIndex(l.stage) >= stageIndex('messaged')).length;
+  const replies = leads.filter(l => stageIndex(l.stage) >= stageIndex('replied')).length;
+  const callsBooked = leads.filter(l => stageIndex(l.stage) >= stageIndex('call-booked')).length;
+
+  const activeDeals = deals.filter(d => d.stage !== 'closed');
+  const pipelineValue = activeDeals.reduce((sum, d) => sum + (d.value || 0), 0);
+  const activeClients = clients.filter(c => c.status === 'active');
+  const monthlyRevenue = activeClients.reduce((sum, c) => sum + (c.monthly_value || 0), 0);
+
+  function metricCard(label, value, sub) {
+    return `<div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <p class="text-sm font-medium text-gray-500 mb-1">${label}</p>
+      <p class="text-3xl font-bold text-gray-900">${value}</p>
+      ${sub ? `<p class="text-xs text-gray-400 mt-1">${sub}</p>` : ''}
+    </div>`;
+  }
+
+  container.innerHTML = `
+    <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Activity</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      ${metricCard('Messages Sent', messagesSent, 'Leads contacted')}
+      ${metricCard('Replies', replies, 'Conversations started')}
+      ${metricCard('Calls Booked', callsBooked, 'Discovery calls+')}
+    </div>
+    <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Pipeline &amp; Revenue</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      ${metricCard('Pipeline Value', formatCurrency(pipelineValue) + '/mo', activeDeals.length + ' active deals')}
+      ${metricCard('Active Clients', activeClients.length, 'Currently managed')}
+      ${metricCard('Monthly Revenue', formatCurrency(monthlyRevenue) + '/mo', 'Recurring revenue')}
+    </div>`;
+}
+
+let funnelChart = null;
+
+function renderOutreachTab(leads) {
+  const container = document.getElementById('outreach-content');
+  const empty = document.getElementById('outreach-empty');
+
+  if (!leads.length) {
+    container.classList.add('hidden');
+    empty.classList.remove('hidden');
+    return;
+  }
+  container.classList.remove('hidden');
+  empty.classList.add('hidden');
+
+  const stageCounts = STAGES.map(s => leads.filter(l => l.stage === s).length);
+  const channels = new Set(leads.map(l => l.channel).filter(Boolean));
+
+  container.innerHTML = `
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-4">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Outreach Funnel</h2>
+      <div class="chart-container"><canvas id="funnelCanvas"></canvas></div>
+    </div>
+    <p class="text-sm text-gray-500 text-center">${leads.length} total leads across ${channels.size} channel${channels.size !== 1 ? 's' : ''}</p>`;
+
+  if (funnelChart) funnelChart.destroy();
+
+  const ctx = document.getElementById('funnelCanvas').getContext('2d');
+  funnelChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: STAGES.map(s => STAGE_LABELS[s]),
+      datasets: [{
+        data: stageCounts,
+        backgroundColor: STAGES.map(s => STAGE_COLORS[s].chart),
+        borderRadius: 4,
+        barThickness: 28,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.raw} lead${ctx.raw !== 1 ? 's' : ''}`
+          }
+        }
+      },
+      scales: {
+        x: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 }, grid: { color: 'rgba(0,0,0,0.04)' } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+function renderPipelineTab(deals) {
+  const container = document.getElementById('pipeline-content');
+  const empty = document.getElementById('pipeline-empty');
+
+  if (!deals.length) {
+    container.classList.add('hidden');
+    empty.classList.remove('hidden');
+    return;
+  }
+  container.classList.remove('hidden');
+  empty.classList.add('hidden');
+
+  const sorted = [...deals].sort((a, b) => (b.last_updated || '').localeCompare(a.last_updated || ''));
+
+  container.innerHTML = `
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deal</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Niche</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stage</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Next Action</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Updated</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            ${sorted.map(d => `<tr class="hover:bg-gray-50">
+              <td class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">${d.name}</td>
+              <td class="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">${d.contact || '—'}</td>
+              <td class="px-6 py-4 text-sm text-gray-600 whitespace-nowrap capitalize">${d.niche || '—'}</td>
+              <td class="px-6 py-4 text-sm whitespace-nowrap">${stageBadge(d.stage)}</td>
+              <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap font-medium">${formatCurrency(d.value)}/mo</td>
+              <td class="px-6 py-4 text-sm text-gray-600">${d.next_action || '—'}</td>
+              <td class="px-6 py-4 text-sm text-gray-400 whitespace-nowrap">${formatDate(d.last_updated)}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function renderClientsTab(clients) {
+  const container = document.getElementById('clients-content');
+  const empty = document.getElementById('clients-empty');
+
+  if (!clients.length) {
+    container.classList.add('hidden');
+    empty.classList.remove('hidden');
+    return;
+  }
+  container.classList.remove('hidden');
+  empty.classList.add('hidden');
+
+  container.innerHTML = `
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      ${clients.map(c => {
+        const health = getHealth(c);
+        const hc = HEALTH_CONFIG[health];
+        const commitBadge = c.open_commitments_count
+          ? `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">${c.open_commitments_count} open</span>`
+          : '';
+        return `<div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">${c.name}</h3>
+              <p class="text-sm text-gray-500 capitalize">${c.industry || 'Unknown'}</p>
+            </div>
+            <div class="flex items-center space-x-1.5">
+              <span class="w-2.5 h-2.5 rounded-full ${hc.dot}"></span>
+              <span class="text-xs font-medium ${hc.text}">${hc.label}</span>
+            </div>
+          </div>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between">
+              <span class="text-gray-500">Monthly Value</span>
+              <span class="font-medium text-gray-900">${formatCurrency(c.monthly_value)}/mo</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">Meeting Cadence</span>
+              <span class="text-gray-700 capitalize">${c.meeting_cadence || '—'}</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-500">Commitments</span>
+              <span>${commitBadge || '<span class="text-gray-400">None</span>'}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">Next Meeting</span>
+              <span class="text-gray-700">${c.next_meeting_date ? formatDate(c.next_meeting_date) : 'No meeting scheduled'}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">Last Updated</span>
+              <span class="text-gray-400">${formatDate(c.last_updated)}</span>
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+// ============================================================
+// Init
+// ============================================================
+
+async function initDashboard() {
+  await DataSource.init();
+
+  const banner = document.getElementById('demo-banner');
+  banner.classList.toggle('hidden', DataSource.mode !== 'demo');
+
+  const [leads, deals, clients] = await Promise.all([
+    DataSource.getLeads(),
+    DataSource.getDeals(),
+    DataSource.getClients(),
+  ]);
+
+  renderOverview(leads, deals, clients);
+  renderOutreachTab(leads);
+  renderPipelineTab(deals);
+  renderClientsTab(clients);
+  switchTab('overview');
+}
+
+initDashboard();
+</script>
+
+</body>
+</html>

@@ -1,11 +1,11 @@
 ---
-skill: setup-dashboard
+skill: 
 last_updated: null
 entry_count: 0
 max_entries: 30
 ---
 
-# Learnings: Setup Dashboard
+# Learnings: 
 
 ## Preferences
 <!-- Stable learnings that rarely change (e.g., output format preferences, #style, #process) -->
