@@ -35,18 +35,31 @@ This project helps voice AI agency operators acquire their next client and deliv
 | `/agency-ops:voice-agent` | Guide voice agent template selection | When building for a client |
 | `/agency-ops:system-build` | Guide n8n system template selection | When building automations |
 | `/agency-ops:lead-gen` | Guide lead gen pipeline setup | When setting up prospecting |
+| `/agency-ops:setup-dashboard` | Connect dashboard to Supabase for live data | After viewing dashboard demo data |
 
 ## Act / Ask / Absorb
 
 Decision framework for how Claude operates in this project:
 
-- **Act**: Execute autonomously for read-only operations, file-based context updates, skill execution
+- **Act**: Execute autonomously for read-only operations, file-based context updates, skill execution, capturing customization ideas to backlog
 - **Ask**: Propose and wait for approval on write actions to external systems, contract generation, outreach messages
 - **Absorb**: Silently log informational context (meeting notes, client preferences) with no action needed
 
 ## Self-Learning
 
 Every skill directory contains `learnings.md` (accumulated knowledge with 30-entry cap) and `references/` (templates, examples). Skills compound through use — the more you use them, the better they get at understanding your preferences and patterns.
+
+## Customization & Ideas
+
+This project is designed to grow with you. Claude is your co-founder here -- when you mention an idea for how the system could work better for your agency, Claude will:
+
+1. **Capture it** to your customization backlog (`context/customization-backlog.md`)
+2. **Redirect you** back to what matters -- acquiring and serving clients
+
+Feel free to dream big during conversations. Want a new dashboard metric? A different email format? A skill that doesn't exist yet? Just mention it. Claude will capture it and keep you focused.
+
+> Dashboard doesn't get clients -- messages do.
+> Customize when you're ready. Outreach first.
 
 ## Building for Clients
 
@@ -79,7 +92,13 @@ voice-ai-agency-ops-hub/
     commands/gsd/                   # GSD framework commands
   context/
     agency.md                      # Your agency identity
+    customization-backlog.md       # Your ideas (Claude captures these)
     clients/
       _template.md                 # Client file template
       _example-client-sunrise-dental.md  # Fictional example
+  docs/
+    skill-reference.md             # How skills work + customization hooks
+    dashboard-customization.md     # How to modify your dashboard
+  dashboard/
+    index.html                     # Your agency dashboard
 ```
