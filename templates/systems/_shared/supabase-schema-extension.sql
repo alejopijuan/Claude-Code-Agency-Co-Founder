@@ -1,3 +1,8 @@
+-- NOTE: These tables are now included in the base schema at
+-- .claude/commands/agency-ops/setup-dashboard/references/supabase-schema.sql
+-- This file is kept for reference by architecture guides.
+-- New users should run the base schema only.
+
 -- ============================================================
 -- Agency Ops Hub -- Supabase Schema Extension
 -- Run AFTER the base schema (leads, deals, clients tables)

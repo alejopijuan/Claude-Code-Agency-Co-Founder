@@ -11,9 +11,9 @@ open_commitments_count: 2
 next_meeting_date: "2026-04-08"
 ---
 
-> **This is a fictional example client for reference.** It shows what a well-maintained client file looks like. Use `/agency-ops:new-client` to create your own.
-
 # Sunrise Dental
+
+> **This is a fictional example client for reference.** It shows what a well-maintained client file looks like. Use `/agency-ops:new-client` to create your own.
 
 ## Project Scope
 

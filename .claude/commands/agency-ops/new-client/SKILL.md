@@ -23,6 +23,11 @@ I'll help you set up a context file for your new client. I'll ask a few question
 5. Generate the client file as soon as you have enough info (name + industry minimum). Ask remaining optional questions after initial generation if the user wants to continue.
 6. Fill in sensible defaults for skipped fields based on the agency's context from `context/agency.md`.
 
+## SOP References
+
+Before creating the client file, read this SOP for onboarding context:
+- Read `context/sops/client-onboarding.md` -- reference the full onboarding workflow to inform which fields to prioritize and what defaults to set. This ensures the client file is ready for the onboarding process.
+
 ## Questions
 
 Ask in this order. Mark required questions clearly to the user.

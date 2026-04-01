@@ -57,8 +57,18 @@ When `$ARGUMENTS` starts with "add":
    2. "Is there an outreach lead file for this contact? If yes, what's their name in the outreach folder?" -- check if `context/outreach/{name}.md` exists. If it does, set `outreach_file` to the filename (without .md). If not found or user says no, set `outreach_file` to an empty string.
    3. "What's the estimated monthly value? (in dollars)"
    4. "What stage is this deal in?" -- show the 7 stages listed above. Default to `new-lead` if user skips.
-4. Generate deal file at `context/pipeline/{lowercase-hyphenated-name}.md` using the template from `context/pipeline/_template.md`.
-5. Initialize the Stage Transitions table with the first entry: `| {today} | -- | {stage} | Created |`
+   5. Infer niche from `context/agency.md` `niche` field. If agency.md has a niche set (non-empty, not `{{niche}}`), use it as the default and confirm: "I'll set the niche to '{niche}' from your agency profile. Is that correct, or would you like a different niche for this deal?" If agency.md has no niche, ask: "What niche/industry is this deal in?"
+   6. Set `next_action` based on the deal's stage:
+      - `new-lead` -> `"Send first outreach"`
+      - `messaged` -> `"Follow up on outreach"`
+      - `replied` -> `"Book discovery call"`
+      - `call-booked` -> `"Prepare for call"`
+      - `discovery` -> `"Send proposal"`
+      - `proposal` -> `"Follow up on proposal"`
+      - `closed` -> `"Begin onboarding"`
+      Tell the user: "Default next action for {stage} is '{next_action}'. Want to customize it?"
+7. Generate deal file at `context/pipeline/{lowercase-hyphenated-name}.md` using the template from `context/pipeline/_template.md`. Fill in all frontmatter fields: name, contact, outreach_file, stage, niche, value, next_action, created, last_updated.
+8. Initialize the Stage Transitions table with the first entry: `| {today} | -- | {stage} | Created |`
 
 ## Move Deal Flow
 

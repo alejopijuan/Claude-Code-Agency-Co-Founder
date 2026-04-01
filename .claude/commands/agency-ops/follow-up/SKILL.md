@@ -25,6 +25,12 @@ I'll process your meeting notes into action items, draft a follow-up email, and 
 7. Never edit or delete existing rows in the Commitments Log -- only append new rows.
 8. Use AskUserQuestion for each question individually, never batch multiple questions.
 
+## SOP References
+
+Before processing meeting notes, read these SOPs for context:
+- Read `context/sops/client-onboarding.md` -- if this is a kickoff or early-stage meeting, reference the onboarding workflow (Sections 1-3) for expected deliverables and timeline.
+- Read `context/sops/testimonial-collection.md` -- if the client relationship is 30+ days old and going well, check whether a testimonial ask is appropriate. Reference the timing criteria (Section 1) and ask templates (Section 2).
+
 ## Input Gathering
 
 Ask the user for meeting details using AskUserQuestion, one question at a time:
@@ -119,7 +125,7 @@ Before writing to the client file, show the user exactly what will be appended:
 - **Action:** [key action items]
 ```
 
-**Frontmatter update:** `last_updated` will be set to today's date.
+**Frontmatter update:** `last_updated` will be set to today's date. `open_commitments_count` will be set to the number of Pending/In Progress commitments. `next_meeting_date` will be computed from meeting cadence.
 
 ## Client File Update
 
@@ -154,6 +160,8 @@ Append a new meeting notes entry at the TOP of the Meeting Notes section (most r
 ### Frontmatter and Last Updated
 
 - Update the `last_updated` field in the YAML frontmatter to today's date (YYYY-MM-DD format)
+- Count the number of rows in the Commitments Log where Status is "Pending" or "In Progress". Update `open_commitments_count` in frontmatter to this count. If the field does not exist in frontmatter, add it after `staleness_threshold_days`.
+- Compute the next meeting date from the Meeting Cadence section. Use the cadence interval (7 days for weekly, 14 for biweekly, 30 for monthly) added to today's date. Format as YYYY-MM-DD. If the user provides an explicit next meeting date in their meeting notes, use that instead. Update `next_meeting_date` in frontmatter. If the field does not exist, add it after `open_commitments_count`.
 - Update the `## Last Updated` section at the bottom of the file to today's date
 
 Use the Write tool to update the client file with all of these changes applied. Read the full client file first, apply the changes in memory, and write the complete updated file.

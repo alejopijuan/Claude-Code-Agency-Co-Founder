@@ -31,7 +31,7 @@ Every skill in Agency Ops Hub follows a consistent architecture:
 | **Setup** | onboarding, new-client, setup-dashboard | Configure your agency, add clients, connect your dashboard |
 | **Client Operations** | client-briefing, meeting-prep, follow-up, weekly-review | Manage active client relationships day-to-day |
 | **Sales & Outreach** | outreach, pipeline, proposal | Find leads, track deals, generate proposals |
-| **Delivery** | voice-agent, system-build, lead-gen | Plan and scope voice AI projects *(Coming in Phase 4)* |
+| **Delivery** | voice-agent, system-build, lead-gen | Plan and scope voice AI projects |
 
 ---
 
@@ -339,83 +339,95 @@ Try running `/agency-ops:proposal <client-name>` after your next discovery call.
 
 ## /agency-ops:voice-agent
 
-**Guide voice agent template selection and customization for a client.** *Coming in Phase 4.*
+**Guide voice agent design, customization, and Retell prompt creation for a client.**
 
 ### Design Rationale
 
-- **Assessment-driven recommendation.** Asks about the client's primary pain point, call volume, and current process before recommending one of three use case types (Inbound Receptionist, Speed-to-Lead, Database Reactivation).
-- **Platform-agnostic.** Focuses on use case design, not platform-specific configuration. Works whether you use Retell, Vapi, or ElevenLabs.
-- **Success metrics built in.** Each use case type includes specific metrics to propose to the client and track post-launch.
+- **5-stage template router.** Assessment -> recommendation -> template selection -> customization -> Retell prompt generation. Each stage builds on the previous.
+- **Retell-first design.** Templates strongly recommend Retell with system prompts optimized for Retell's GPT 4.1 engine. ElevenLabs users are directed to the separate prompt engineering reference guide (`templates/voice-agents/_shared/prompt-engineering/`).
+- **Cross-skill context.** Reads the client's `voice-agent-design.md` if it exists, enabling continuity between voice-agent and system-build skills.
+- **Three use case types.** Inbound Receptionist, Speed-to-Lead, Database Reactivation -- each with dedicated system design documents, call flow diagrams, success metrics, and testing checklists.
+- **Templatized Retell configs.** JSON configs and system prompts in `templates/voice-agents/retell-configs/` and `templates/voice-agents/retell-prompts/` with `{{variable}}` placeholders for client-specific customization.
 
-### Planned Customization Hooks
+### Customization Hooks
 
 | What | Where | How |
 |------|-------|-----|
 | Use case types | `## Use Case Types` section in `SKILL.md` | Add new voice agent types beyond the current three |
-| Assessment questions | `## Use Case Assessment` section in `SKILL.md` | Add follow-up questions for new use case types |
-| Success metrics | Each use case's "Success metrics to track" section in `SKILL.md` | Add metrics relevant to your niche |
+| Assessment questions | `## Stage 1: Use Case Assessment` section in `SKILL.md` | Add or modify assessment questions |
+| Retell prompt templates | `templates/voice-agents/retell-prompts/` | Customize system prompts for your niche |
+| Retell JSON configs | `templates/voice-agents/retell-configs/` | Adjust voice, language, interruption settings |
+| Success metrics | Each use case's template in `templates/voice-agents/` | Add metrics relevant to your niche |
 | Stage-gated advice | `## Stage-Gated Adjustments` section in `SKILL.md` | Customize recommendations per agency stage |
 
 ### What NOT to Change
 
-- **Use case type names** (Inbound Receptionist, Speed-to-Lead, Database Reactivation) if other skills or templates reference them.
+- **Use case type names** (Inbound Receptionist, Speed-to-Lead, Database Reactivation). Templates and system-build skill reference these.
+- **`{{variable}}` placeholder syntax** in Retell configs and prompts. The skill's fill logic depends on double-curly-brace placeholders.
+- **Client subdirectory file names** (`voice-agent-design.md`). The system-build skill reads this for cross-skill context.
 
-Phase 4 will add detailed system design document templates with call flow diagrams, integration specs, and platform-specific configuration guides.
+Try running `/agency-ops:voice-agent <client-name>` to design a voice agent.
 
 ---
 
 ## /agency-ops:system-build
 
-**Guide system architecture template selection for client automations.** *Coming in Phase 4.*
+**Guide n8n system architecture selection and customization for client automations.**
 
 ### Design Rationale
 
-- **Two architecture patterns.** Pre-Call Automation (triggers, routing, agent initiation) and Post-Call Reporting (CRM updates, notifications, follow-up actions). Most projects need both.
-- **n8n-focused but tool-agnostic.** Architecture descriptions reference n8n nodes but the patterns work with Make, Zapier, or custom code.
-- **Build time estimates.** Each architecture type includes realistic time estimates so you can scope accurately in proposals.
+- **Two architecture patterns.** Pre-Call Automation (lead form -> trigger -> agent call) and Post-Call Reporting (call summary -> structured data -> Supabase dashboard). Most client projects need both.
+- **n8n-focused with decision matrix.** Each guide includes an inline n8n-vs-code decision matrix so users can evaluate which approach fits their situation.
+- **Cross-skill context.** Reads the client's `voice-agent-design.md` from the voice-agent skill for continuity -- system architecture is informed by the voice agent design choices already made.
+- **Supabase integration.** Post-call reporting maps Retell webhook fields to the Supabase `calls` table with the established dual-write pattern.
+- **Architecture guides, not importable JSON.** n8n JSON breaks across versions. Guides describe node types, connections, and configuration so users can build reliably.
 
-### Planned Customization Hooks
+### Customization Hooks
 
 | What | Where | How |
 |------|-------|-----|
-| Architecture types | `## Architecture Types` section in `SKILL.md` | Add new system patterns beyond pre-call and post-call |
-| n8n node recommendations | Each architecture's "Required n8n nodes" section in `SKILL.md` | Update for your preferred automation tool |
-| Build time estimates | Each architecture's "Estimated build time" section in `SKILL.md` | Adjust based on your experience and efficiency |
-| Testing checklist | Each architecture's "Testing approach" section in `SKILL.md` | Add test cases specific to your common integrations |
+| Architecture types | `## Stage 1: Architecture Assessment` section in `SKILL.md` | Add new system patterns beyond pre-call and post-call |
+| n8n node recommendations | Architecture guide files in `templates/systems/` | Update for your preferred automation tool |
+| Supabase schema | `templates/systems/_shared/supabase-schema-extension.md` | Add columns or tables for custom data |
+| Testing checklist | Each architecture guide's testing section | Add test cases for your common integrations |
+| Decision matrix | Inline in each guide file | Adjust criteria for n8n vs code trade-offs |
 
 ### What NOT to Change
 
 - **Architecture type names** (Pre-Call Automation, Post-Call Reporting) if referenced in proposals or SOPs.
+- **Supabase table schema** field names used by the dashboard. Check `templates/systems/_shared/` before modifying.
 
-Phase 4 will add importable n8n workflow JSON templates and step-by-step build guides.
+Try running `/agency-ops:system-build <client-name>` to plan an automation system.
 
 ---
 
 ## /agency-ops:lead-gen
 
-**Guide lead generation pipeline setup for your niche.** *Coming in Phase 4.*
+**Guide lead generation strategy selection for your niche.**
 
 ### Design Rationale
 
-- **Niche-specific search terms.** Provides recommended Google Maps search queries tailored to each niche (dental, med spa, roofing, HVAC, law firms, real estate).
-- **Apify-based scraping with quality filtering.** Recommends filtering by review count, website presence, phone number, and chain detection to find ideal prospects.
-- **Cost transparency.** Includes Apify credit estimates so you know what lead generation costs before starting.
-- **Feeds directly into outreach.** Designed to produce leads that you track with `/agency-ops:outreach`.
+- **Strategy-first approach.** Focuses on referrals, partnerships, warm outreach, content, and networking as primary lead sources. These are the highest-conversion, lowest-cost methods for agency operators.
+- **Scraping as optional reference.** Google Maps scraping via Apify is available for users who want it, documented in `templates/lead-gen/google-maps-scraping.md`. It is not the default path or the first recommendation.
+- **Niche-specific recommendations.** Each strategy is adapted to the user's niche from `agency.md` -- what works for dentists differs from what works for roofers.
+- **Feeds directly into outreach.** Generated leads flow into `/agency-ops:outreach add` for tracking and follow-up.
+- **Cost-conscious.** Prioritizes free and relationship-based strategies before paid tools. Includes cost transparency for any paid approaches (Apify credits, ad spend).
 
-### Planned Customization Hooks
+### Customization Hooks
 
 | What | Where | How |
 |------|-------|-----|
-| Search terms by niche | `## Lead Generation Approaches > ### Google Maps Scraping` table in `SKILL.md` | Add niches or modify search queries |
-| Filtering criteria | "Filtering criteria" section in `SKILL.md` | Adjust review thresholds, add exclusion rules |
-| Volume targets | `## Pipeline Assessment > ### Question 3` in `SKILL.md` | Change the suggested volume ranges per stage |
-| Complementary approaches | `## Lead Generation Approaches > ### Complementary Approaches` in `SKILL.md` | Add new lead sources (e.g., Yelp scraping, trade show lists) |
+| Strategy recommendations | `## Stage 2: Strategy Recommendation` section in `SKILL.md` | Add or reorder strategies for your market |
+| Niche-specific search terms | `templates/lead-gen/google-maps-scraping.md` | Add niches or modify Google Maps search queries |
+| Volume targets | `## Stage 1: Strategy Assessment > ### Question 4` in `SKILL.md` | Change suggested volume ranges per agency stage |
+| Scraping configuration | `templates/lead-gen/google-maps-scraping.md` | Adjust Apify actor settings, filtering criteria |
 
 ### What NOT to Change
 
 - **Outreach file format compatibility.** Leads generated here should match the format expected by `/agency-ops:outreach add`.
+- **Strategy-first framing.** Do not reorder scraping above relationship-based methods. The masterclass teaches strategy-first for good reason -- it converts better and builds sustainable pipelines.
 
-Phase 4 will add Apify actor configuration templates, automated filtering scripts, and n8n integration for scrape-to-outreach automation.
+Try running `/agency-ops:lead-gen` to set up prospecting for your niche.
 
 ---
 

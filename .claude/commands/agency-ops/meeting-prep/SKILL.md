@@ -24,6 +24,11 @@ I'll generate a structured agenda for your upcoming client meeting.
 6. Output must be a numbered agenda -- structured, scannable, ready to use in a meeting.
 7. Use AskUserQuestion for each question individually, never batch.
 
+## SOP References
+
+Before generating the agenda, read these SOPs for protocol context:
+- Read `context/sops/meeting-protocol.md` -- use the Agenda Structure (Section 2) to inform agenda item ordering and time allocations. Reference the Meeting Types (Section 5) to adjust depth based on meeting type.
+
 ## Input Gathering
 
 After reading the client file, optionally ask:

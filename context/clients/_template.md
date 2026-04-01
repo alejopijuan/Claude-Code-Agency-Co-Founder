@@ -7,6 +7,8 @@ start_date: "{{start_date}}"
 meeting_cadence: biweekly
 last_updated: "{{today}}"
 staleness_threshold_days: 14
+open_commitments_count: 0
+next_meeting_date: ""
 ---
 
 # {{client_name}}

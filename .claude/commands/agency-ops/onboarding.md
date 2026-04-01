@@ -46,7 +46,7 @@ This answer determines the depth of subsequent questions.
 ## Stage 2: Core Identity (3-4 questions, then GENERATE)
 
 Ask about:
-1. **Agency name** -- What's your agency called? (If starting out, suggest they pick a working name -- they can always change it later with `--reset`)
+1. **Agency name** -- Ask them to type their agency name. Present two options: "I haven't chosen a name yet" or let them type it in. Never suggest a specific name. If they haven't chosen, help them pick a working name -- they can always change it later with `--reset`.
 2. **Core offering** -- What's the core of your business? Present options:
    - **Voice AI systems** -- Speed-to-lead, after-hours inbound, database reactivation
    - **Broader AI automation** -- Voice + workflows, n8n systems, chatbots, integrations

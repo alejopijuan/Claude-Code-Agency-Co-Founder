@@ -95,7 +95,7 @@ Health values:
 
 ### Starting Out (0 clients)
 
-If the agency stage is "starting" or "learning" and no client files exist:
+If the agency stage is "starting-out" and no client files exist:
 
 > No clients yet! Your weekly review will become powerful once you add clients. Run `/agency-ops:new-client` to get started.
 

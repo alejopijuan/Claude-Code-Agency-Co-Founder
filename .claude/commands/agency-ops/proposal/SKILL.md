@@ -25,6 +25,11 @@ I'll help you create proposals, follow-up emails, and fill contract templates fo
 7. Read `templates/proposals/` for template references when filling SOW, service agreement, or onboarding checklist.
 8. Read `references/artifact-prompt-template.md` for the artifact prompt format when generating proposals.
 
+## SOP References
+
+Before generating proposals or contracts, read this SOP for scope management context:
+- Read `context/sops/scope-management.md` -- reference the scope boundaries (Section 2) and phased delivery approach (Section 3) when generating SOW deliverables and exclusions. Use the scope creep prevention language (Section 4) in service agreement terms.
+
 ## Actions
 
 After reading agency and client context, ask the user which action they want:
