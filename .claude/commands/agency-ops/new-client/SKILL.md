@@ -54,12 +54,14 @@ Ask in this order. Mark required questions clearly to the user.
 After collecting the required answers:
 
 1. **Generate filename:** Lowercase, hyphenated version of the client name.
-   - "Sunrise Dental" becomes `sunrise-dental.md`
-   - "Dr. Smith's Practice" becomes `dr-smiths-practice.md`
+   - "Sunrise Dental" becomes `sunrise-dental`
+   - "Dr. Smith's Practice" becomes `dr-smiths-practice`
 
-2. **Write the file** to `context/clients/{filename}.md` following the exact structure from `context/clients/_template.md`.
+2. **Create client directory:** `mkdir -p context/clients/{filename}`
 
-3. **Set these fields:**
+3. **Write the file** to `context/clients/{filename}/{filename}.md` following the exact structure from `context/clients/_template.md`.
+
+4. **Set these fields:**
    - `last_updated`: today's date in ISO 8601 format (YYYY-MM-DD)
    - `start_date`: today's date in ISO 8601 format
    - `staleness_threshold_days: 14`
@@ -67,13 +69,13 @@ After collecting the required answers:
    - `meeting_cadence`: user's answer or default "biweekly"
    - `monthly_value`: user's answer or default 0
 
-4. **Initialize the Commitments Log** with table headers and one initial entry:
+5. **Initialize the Commitments Log** with table headers and one initial entry:
 
    | Date | Commitment | Owner | Status | Due |
    |------|------------|-------|--------|-----|
    | {today} | Initial setup and onboarding | {agency_name from agency.md} | In Progress | {today + 14 days} |
 
-5. **Replace all `{{variable}}` placeholders** with actual values. The generated file must NOT contain any `{{}}` template variables.
+6. **Replace all `{{variable}}` placeholders** with actual values. The generated file must NOT contain any `{{}}` template variables.
 
 ## After Generation
 
@@ -89,7 +91,7 @@ After collecting the required answers:
 3. **Suggest next steps:**
    - "Run `/agency-ops:client-briefing {client-name}` to generate your first briefing"
    - "Run `/agency-ops:meeting-prep {client-name}` before your next meeting"
-   - "You can always edit `context/clients/{filename}.md` directly to add more details"
+   - "You can always edit `context/clients/{filename}/{filename}.md` directly to add more details"
 
 ## Supabase Sync
 

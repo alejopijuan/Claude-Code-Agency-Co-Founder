@@ -83,7 +83,7 @@ Capture their choice in `context/agency.md` under the Tracking Approach section.
 ## Stage 5: Wrap Up
 
 1. Verify `context/clients/_template.md` exists (should already be there from setup). If missing, note it but do not create -- it is a setup issue.
-2. Verify `context/clients/_example-client-sunrise-dental.md` exists as the example client file.
+2. Verify `context/clients/_example-sunrise-dental/sunrise-dental.md` exists as the example client file.
 3. Show a final summary:
    - Files created or verified
    - List of available skills (reference the Skill Registry in CLAUDE.md)
@@ -143,4 +143,4 @@ When writing `context/agency.md`:
 3. Follow the exact section structure from the existing `context/agency.md` template (Identity, Services, Team, Tech Stack, Communication Style, Tracking Approach, Clients Summary)
 4. Set `last_updated` in the YAML frontmatter to today's date in ISO 8601 format
 5. Map the journey stage to the frontmatter `stage` field: "starting-out", "getting-traction", or "scaling"
-6. The Clients Summary section should list any existing client files found in `context/clients/` (excluding `_template.md`), or show "No clients added yet" with a pointer to `/agency-ops:new-client`
+6. The Clients Summary section should list any existing client subdirectories found in `context/clients/` (using `ls -d context/clients/*/`), reading each client's main file at `context/clients/{dir-name}/{dir-name}.md`, or show "No clients added yet" with a pointer to `/agency-ops:new-client`

@@ -18,7 +18,7 @@ Here's your cross-client operational summary for the week.
 
 1. Read `context/agency.md` first for agency identity and stage.
 2. Read this skill's `learnings.md` BEFORE generating output; adapt based on any preferences or patterns found.
-3. Use `Bash` to list all files in `context/clients/` (excluding `_template.md`).
+3. Use `Bash` to list all subdirectories in `context/clients/` using `ls -d context/clients/*/`. Each client's main file is `context/clients/{dir-name}/{dir-name}.md`.
 4. Read EVERY client file found -- this is a cross-client summary. Do not skip any client files.
 5. This skill is READ-ONLY on client files -- it does NOT modify them. The Write tool is only for updating this skill's `learnings.md`.
 6. Flag stale files where today's date minus `last_updated` exceeds `staleness_threshold_days` (default 14 days if not specified in the client file).

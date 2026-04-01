@@ -1,0 +1,62 @@
+{
+  "_metadata": {
+    "template": true,
+    "source": "Templatized from production Retell E2E test caller config",
+    "instructions": "This agent simulates a person CALLING your inbound voice agent. Use it to test your inbound receptionist by having this agent initiate a call with a specific scenario. Replace {{VARIABLES}} in default_dynamic_variables to configure test scenarios."
+  },
+  "_template_variables": {
+    "CALLER_NAME": "Name the test caller will use (e.g., 'Maria Rodriguez')",
+    "CALLER_LOCATION": "Where the test caller says they are from",
+    "SERVICE_ISSUE": "What the test caller is inquiring about (e.g., 'teeth cleaning', 'AC repair')",
+    "BUDGET_RESPONSE": "How the test caller responds to pricing questions",
+    "SCHEDULING_RESPONSE": "How the test caller responds to appointment offers",
+    "SCENARIO_INSTRUCTIONS": "Detailed behavioral instructions for this test scenario",
+    "BEGIN_MESSAGE": "The opening line the test caller says when the call starts",
+    "BUSINESS_TYPE": "Type of business being called (e.g., 'dental office', 'law firm', 'HVAC company')"
+  },
+  "agent": {
+    "agent_id": "RETELL_AUTO_GENERATED",
+    "channel": "voice",
+    "agent_name": "E2E Test Caller",
+    "response_engine": {
+      "type": "retell-llm",
+      "llm_id": "RETELL_AUTO_GENERATED",
+      "version": 0
+    },
+    "language": "en-US",
+    "data_storage_setting": "everything",
+    "opt_in_signed_url": false,
+    "is_published": false,
+    "post_call_analysis_model": "gpt-4.1-mini",
+    "pii_config": {
+      "mode": "post_call",
+      "categories": []
+    },
+    "voice_id": "{{VOICE_ID}}",
+    "max_call_duration_ms": 360000,
+    "allow_user_dtmf": true,
+    "user_dtmf_options": {}
+  },
+  "llm": {
+    "llm_id": "RETELL_AUTO_GENERATED",
+    "version": 0,
+    "model": "gpt-4.1",
+    "general_prompt": "You are playing the role of a person calling a {{BUSINESS_TYPE}}.\n\nYour details:\n- Name: {{CALLER_NAME}}\n- Location: {{CALLER_LOCATION}}\n- Issue: {{SERVICE_ISSUE}}\n- Budget response: {{BUDGET_RESPONSE}}\n- Scheduling response: {{SCHEDULING_RESPONSE}}\n\nInstructions: {{SCENARIO_INSTRUCTIONS}}\n\nRULES:\n- Keep responses SHORT - 1-2 sentences max, like a real person on the phone\n- Sound natural and human. Use \"um\", \"yeah\", \"okay\" naturally\n- Answer the agent's questions using your details above\n- If asked something not covered, give a brief realistic answer\n- End the call when the conversation reaches a natural conclusion - don't linger\n- When asked for your phone number, just confirm: \"Yeah that's right\"\n- When asked for email, say your first name dot last name at gmail dot com\n- Do NOT repeat information you already gave\n- Do NOT elaborate unnecessarily - real people are brief on the phone",
+    "start_speaker": "agent",
+    "begin_message": "{{BEGIN_MESSAGE}}",
+    "default_dynamic_variables": {
+      "CALLER_NAME": "Maria Rodriguez",
+      "BEGIN_MESSAGE": "Hi, I'm calling about getting some help with a service issue.",
+      "CALLER_LOCATION": "downtown",
+      "SCENARIO_INSTRUCTIONS": "You want to schedule an appointment. Be cooperative and accept the first available time offered.",
+      "SERVICE_ISSUE": "general service",
+      "BUDGET_RESPONSE": "that sounds fine",
+      "SCHEDULING_RESPONSE": "yes, that time works for me",
+      "BUSINESS_TYPE": "business"
+    },
+    "kb_config": {
+      "top_k": 3,
+      "filter_score": 0.6
+    }
+  }
+}

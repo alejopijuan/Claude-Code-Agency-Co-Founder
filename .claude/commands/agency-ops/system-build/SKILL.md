@@ -1,6 +1,6 @@
 ---
 name: agency-ops:system-build
-description: Guide system architecture template selection for client automations
+description: Guide system architecture template selection and customization for client automations
 argument-hint: "<client-name>"
 disable-model-invocation: false
 allowed-tools:
@@ -10,19 +10,19 @@ allowed-tools:
   - AskUserQuestion
 ---
 
-# System Build Guide
+# System Build -- Template Router
 
-I'll help you plan the automation system architecture for your client. We'll figure out what automations are needed around the voice agent and recommend the right approach.
+I'll guide you through planning the automation architecture for your client's voice agent system. This skill is a template router -- it reads your n8n architecture guides, customizes them for the client, and saves a system architecture document.
 
 ## Rules
 
-1. Read `context/agency.md` to understand the user's agency context (tech stack, automation tool preferences).
-2. Read this skill's `learnings.md` for any accumulated preferences or patterns.
-3. If `$ARGUMENTS` is provided, use it as the client name. Otherwise, use `AskUserQuestion` to ask: "Which client are you building automations for?"
-4. If a client file exists at `context/clients/{client-name}.md`, read it for project context, integrations, and active projects.
-5. If no client file exists, proceed with the assessment based on the user's answers.
+1. Read `context/agency.md` for agency context (tech stack, automation tool preferences).
+2. Read this skill's `learnings.md` for accumulated preferences or patterns.
+3. If `$ARGUMENTS` is provided, use it as the client name. Otherwise, use `AskUserQuestion`: "Which client are you building automations for?"
+4. Read `context/clients/{client-name}/{client-name}.md` if it exists. If no client file exists, suggest running `/agency-ops:new-client` first but allow continuing without one.
+5. Check if a voice-agent-design.md exists for this client (`context/clients/{client-name}/voice-agent-design.md`). If yes, read it for context on which voice agent use case was selected.
 
-## Architecture Assessment
+## Stage 1: Architecture Assessment
 
 Ask the user about their client's automation needs to recommend the right system architecture. Use `AskUserQuestion` for each question individually.
 
@@ -51,98 +51,73 @@ Ask the user about their client's automation needs to recommend the right system
 - Custom database or spreadsheet
 - Other (describe)
 
-## Architecture Types
+## Stage 2: Guide Review and Customization
 
-Based on the assessment, recommend one or both of these system architectures:
+Based on the assessment, read the appropriate guide(s):
+- Pre-call automation: `templates/systems/pre-call-automation.md`
+- Post-call reporting: `templates/systems/post-call-reporting.md`
+- Both (most common for production deployments)
 
-### Pre-Call Automation
+Walk through key decision points with the user via `AskUserQuestion`:
+1. "What triggers the pre-call flow?" (form submission, missed call webhook, schedule, manual trigger)
+2. "What should happen after each call?" (CRM update, notification, follow-up scheduling, dashboard logging)
+3. "Are you using Supabase for dashboard data?" (reference schema extension if yes)
+4. "What's your comfort level with n8n?" (adjust guidance depth accordingly)
 
-**Best for:** Speed-to-lead setups, lead routing, data enrichment before the agent calls.
+Customize the guide with client-specific details -- replace {{variables}} with actual integration names, webhook URLs, and data flow specifics.
 
-**What it does:** Receives a trigger (form submission, missed call webhook, scheduled event), processes the data, and initiates the voice agent call with the right context.
+## Stage 3: Architecture Design
 
-**Architecture overview:**
-1. **Trigger node** -- Webhook receives form data, missed call notification, or scheduled event.
-2. **Data enrichment** -- Look up the lead in CRM. Check for existing record. Pull any relevant history.
-3. **Routing logic** -- Determine which call flow to use (based on lead source, time of day, location, etc.).
-4. **Agent trigger** -- Call Retell/Vapi/ElevenLabs API to initiate the outbound call with enriched context.
-5. **Error handling** -- If the API call fails, retry once. If retry fails, log the error and notify you via Slack/email.
-6. **Logging** -- Record the trigger event and call initiation in a tracking system (Supabase, Google Sheets, or CRM).
+Using the guide as a framework, create a client-specific architecture:
+- Customize the mermaid diagram with client-specific systems (their CRM, their calendar tool, their notification preferences)
+- Map integration points to specific n8n node types
+- Identify which components the client needs vs which are optional
+- Apply the n8n vs code decision matrix from the guide to the client's scale and complexity
 
-**Required n8n nodes:**
-- Webhook (trigger)
-- HTTP Request (CRM lookup, voice AI API call)
-- IF/Switch (routing logic)
-- Error Trigger (error handling)
-- Slack/Email (notifications)
+Present the architecture to the user and ask for adjustments using `AskUserQuestion`:
+"Here's the architecture I'd recommend for [client]. Does this match your plan, or should we adjust anything?"
 
-**Estimated build time:** 2-4 hours for a basic flow, 4-8 hours with complex routing.
+## Stage 4: Output and Save
 
-**Testing approach:**
-- Send test webhook payloads with sample lead data.
-- Verify CRM lookup returns correct data.
-- Confirm agent receives the right context.
-- Test error paths (CRM down, API timeout, malformed data).
+Generate and save a client-specific system architecture document:
 
-### Post-Call Reporting
+**File:** `context/clients/{client-name}/system-architecture.md`
 
-**Best for:** Clients who want visibility into call outcomes, automated CRM updates, and follow-up actions after calls.
+The architecture doc includes:
+- Header with client name, architecture type, voice platform, date
+- Architecture overview (mermaid diagram customized for client)
+- Component list with specific n8n node types
+- Integration details (CRM endpoints, webhook URLs, API references)
+- Data flow description
+- Estimated build time
+- Testing checklist items
+- Graduation path notes (when to move from n8n-only to hybrid to code)
 
-**What it does:** Receives call completion data from the voice AI platform, extracts structured information, updates the CRM, and triggers follow-up actions.
-
-**Architecture overview:**
-1. **Call webhook** -- Receive call completion event from Retell/Vapi/ElevenLabs with recording URL, transcript, duration, and outcome.
-2. **Data extraction** -- Parse the transcript or structured data to extract: caller intent, appointment details, follow-up needed, sentiment.
-3. **CRM update** -- Create or update the contact record with call outcome, notes, and next steps.
-4. **Notification** -- Send a summary to the client (Slack message, email) with key call details.
-5. **Follow-up trigger** -- If the call outcome requires follow-up (send info, schedule callback, send confirmation), trigger the appropriate action.
-6. **Dashboard insert** -- Log structured call data to Supabase or Google Sheets for reporting and analytics.
-
-**Required n8n nodes:**
-- Webhook (call completion trigger)
-- HTTP Request (CRM update, Supabase insert)
-- Code (data extraction from transcript)
-- Slack/Email (notifications)
-- IF/Switch (follow-up routing based on call outcome)
-
-**Estimated build time:** 3-5 hours for basic reporting, 6-10 hours with advanced extraction and multi-system updates.
-
-**Testing approach:**
-- Use sample call completion payloads from the voice AI platform's documentation.
-- Verify data extraction produces correct structured output.
-- Confirm CRM records are created/updated accurately.
-- Test notification delivery and formatting.
-- Validate dashboard data appears correctly.
-
-## Recommendation Output
-
-After the assessment, provide the user with:
-
-1. **Recommended architecture type(s)** with reasoning.
-2. **Architecture diagram** in text format showing the flow of data between systems.
-3. **Required integrations** and which n8n nodes to use.
-4. **Estimated build time** based on complexity.
-5. **Testing checklist** for validating the system works end-to-end.
-6. **Potential gotchas** specific to their setup (e.g., "Dentrix has no open API, so you'll need a Zapier bridge," or "GoHighLevel webhooks require a specific format").
-
-## Phase 4 Note
-
-Detailed n8n workflow architecture guides with step-by-step build instructions, node-by-node configuration, and version-pinned references are coming in Phase 4. These will include importable workflow JSON templates and troubleshooting guides.
-
-For now, use this guidance to plan the architecture, estimate the build effort, and discuss the approach with your client. Reference `context/sops/client-onboarding.md` for the tool setup steps during onboarding.
+Show the user a summary:
+- What was created
+- File location: `context/clients/{client-name}/system-architecture.md`
+- Next steps: "Build this in n8n following the architecture guide, then test with the approach described in the guide."
+- Reference: "The full architecture guides are at `templates/systems/pre-call-automation.md` and `templates/systems/post-call-reporting.md`"
 
 ## Stage-Gated Adjustments
 
-- **Starting out (0-2 clients):** Keep it simple. Build post-call reporting first so your client sees value immediately (call summaries in their CRM). Add pre-call automation only if the use case requires it (S2L).
-- **Growing (3-10 clients):** Standardize your n8n workflows. Create a base workflow template for each architecture type and duplicate/customize per client rather than building from scratch.
-- **Scaling (10+ clients):** Consider a shared infrastructure approach: one Supabase project with per-client tables, a master n8n instance with client-specific sub-workflows, and a central error monitoring dashboard.
+- **Starting out (0-2 clients):** Keep it simple -- post-call reporting first so the client sees value immediately (call summaries in their CRM). Skip pre-call unless the use case requires it (S2L).
+- **Growing (3-10 clients):** Standardize n8n workflows across clients. Build a base workflow template for each architecture type and duplicate/customize per client.
+- **Scaling (10+ clients):** Consider shared infrastructure -- one Supabase project with per-client tables, a master n8n instance with client-specific sub-workflows. Reference the graduation path from the architecture guides.
 
 ## Learnings Update
 
-After completing the assessment, append a learning entry to this skill's `learnings.md`:
+After completing the assessment, append a learning entry to `learnings.md`:
 
 ```markdown
-- **[date]** [tag:system-build] [client/context]: [what was recommended, integration challenges noted, any user adjustments]
+- **[date]** [tag:system-build] [client/context]: [architecture type, integrations, gotchas]
 ```
 
 Keep entries concise. Focus on integration-specific gotchas and reusable patterns (e.g., "ServiceTitan webhook format requires custom parsing in Code node").
+
+## Supabase Sync
+
+After saving the architecture doc, if `context/agency.md` has valid `supabase_url` and `supabase_anon_key`:
+- Upsert to `agent_configs` table: client_id (lookup by client name), architecture_type, status='planning'
+- Use the same curl pattern from `/agency-ops:new-client` with `Prefer: resolution=merge-duplicates`
+- If curl fails, note "Dashboard sync skipped" and continue

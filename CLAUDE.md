@@ -12,13 +12,12 @@ This is a guided conversation that asks about your niche, experience level, clie
 
 This project helps voice AI agency operators acquire their next client and deliver successfully. It provides:
 
-- **Personalized agency identity** -- your niche, services, pricing, communication style
-- **Client context management** -- structured files that Claude reads for every interaction
-- **Operations skills** -- slash commands for client briefings, meeting prep, follow-ups, outreach, pipeline tracking, and proposals
-- **Self-learning architecture** -- skills that get better as you use them, learning your preferences and patterns
-- **Delivery templates** -- voice agent design docs, system architecture guides, lead gen pipeline templates
-- **Agency dashboard** -- local HTML dashboard showing outreach funnel, pipeline, and client health (connect to Supabase for live data)
-- **GSD development framework** -- use `/gsd:new-project` to plan and build voice AI systems for your clients
+- **Personalized agency identity** — your niche, services, pricing, communication style
+- **Client context management** — structured files that Claude reads for every interaction
+- **Operations skills** — slash commands for client briefings, meeting prep, follow-ups, outreach, pipeline tracking, and proposals
+- **Self-learning architecture** — skills that get better as you use them, learning your preferences and patterns
+- **Delivery templates** — voice agent design docs, system architecture guides, lead gen pipeline templates
+- **GSD development framework** — use `/gsd:new-project` to plan and build voice AI systems for your clients
 
 ## Available Skills
 
@@ -33,29 +32,31 @@ This project helps voice AI agency operators acquire their next client and deliv
 | `/agency-ops:outreach` | Track and manage outreach | Daily outreach sessions |
 | `/agency-ops:pipeline` | View and manage deal pipeline | Reviewing sales progress |
 | `/agency-ops:proposal` | Generate proposals + artifacts | After discovery calls |
-| `/agency-ops:voice-agent` | Guide voice agent template selection | When building for a client |
-| `/agency-ops:system-build` | Guide n8n system template selection | When building automations |
-| `/agency-ops:lead-gen` | Guide lead gen pipeline setup | When setting up prospecting |
+| `/agency-ops:voice-agent` | Guide voice agent design, customization, and Retell prompt creation | When building a voice agent for a client |
+| `/agency-ops:system-build` | Guide n8n system architecture selection and customization | When building automations for a client |
+| `/agency-ops:lead-gen` | Guide lead generation strategy selection for your niche | When setting up prospecting |
 | `/agency-ops:setup-dashboard` | Connect dashboard to Supabase | When setting up live data visualization |
-
-## Customization & Ideas
-
-This toolkit is your co-founder -- built to adapt to how you work. As you use it, Claude captures customization ideas in `context/customization-backlog.md`. Review during weekly reviews or when you're ready to make it more yours.
-
-- `docs/skill-reference.md` -- design rationale and customization hooks for every skill
-- `docs/dashboard-customization.md` -- step-by-step guide to modifying the dashboard
 
 ## Act / Ask / Absorb
 
 Decision framework for how Claude operates in this project:
 
-- **Act**: Execute autonomously for read-only operations, file-based context updates, skill execution, capturing customization ideas to backlog
+- **Act**: Execute autonomously for read-only operations, file-based context updates, skill execution
 - **Ask**: Propose and wait for approval on write actions to external systems, contract generation, outreach messages
 - **Absorb**: Silently log informational context (meeting notes, client preferences) with no action needed
 
 ## Self-Learning
 
-Every skill directory contains `learnings.md` (accumulated knowledge with 30-entry cap) and `references/` (templates, examples). Skills compound through use -- the more you use them, the better they get at understanding your preferences and patterns.
+Every skill directory contains `learnings.md` (accumulated knowledge with 30-entry cap) and `references/` (templates, examples). Skills compound through use — the more you use them, the better they get at understanding your preferences and patterns.
+
+## Delivery Templates
+
+Templates for building and delivering voice AI solutions:
+- `templates/voice-agents/` -- System design documents for inbound receptionist, speed-to-lead, and database reactivation
+- `templates/systems/` -- n8n architecture guides for pre-call and post-call automations
+- `templates/lead-gen/` -- Lead generation strategy guide
+
+Run `/agency-ops:voice-agent`, `/agency-ops:system-build`, or `/agency-ops:lead-gen` to use these templates interactively.
 
 ## Building for Clients
 
@@ -89,13 +90,23 @@ voice-ai-agency-ops-hub/
     commands/gsd/                   # GSD framework commands
   context/
     agency.md                      # Your agency identity
-    customization-backlog.md       # Ideas captured during conversations
     clients/
       _template.md                 # Client file template
-      _example-client-sunrise-dental.md  # Fictional example
-  dashboard/
-    index.html                     # Agency dashboard (open in browser)
-  docs/
-    skill-reference.md             # Design rationale + customization hooks
-    dashboard-customization.md     # Dashboard modification guide
+      _example-sunrise-dental/
+        sunrise-dental.md          # Fictional example
+  templates/
+    voice-agents/                  # Voice agent system design documents
+      _shared/                    # Shared testing, go-live, KB gathering
+      retell-configs/             # Templatized Retell JSON configs
+      retell-prompts/             # Templatized system prompts
+      inbound-receptionist.md
+      speed-to-lead.md
+      database-reactivation.md
+    systems/                      # n8n architecture guides
+      _shared/                    # Supabase schema extension
+      pre-call-automation.md
+      post-call-reporting.md
+    lead-gen/                     # Lead gen strategy guide
+      lead-gen-strategy.md
+      google-maps-scraping.md
 ```

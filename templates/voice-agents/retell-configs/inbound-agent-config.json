@@ -1,0 +1,243 @@
+{
+  "_metadata": {
+    "template": true,
+    "source": "Templatized from production Retell inbound agent config",
+    "instructions": "Replace all {{VARIABLES}} before importing to Retell. Fields marked with RETELL_AUTO are generated automatically by Retell when you create the agent -- do not set them manually."
+  },
+  "_template_variables": {
+    "AGENT_NAME": "Display name for the agent (e.g., 'Sunrise Dental Receptionist')",
+    "WEBHOOK_URL": "Your post-call webhook URL (e.g., n8n webhook or backend endpoint)",
+    "VOICE_ID": "Retell voice ID -- see prompt-engineering-elevenlabs.md for recommended voices, or use Retell built-in voices (e.g., '11labs-Susan')",
+    "SYSTEM_PROMPT": "Paste the full system prompt from retell-prompts/inbound-system-prompt.md after customizing it"
+  },
+  "agent": {
+    "agent_id": "RETELL_AUTO_GENERATED",
+    "channel": "voice",
+    "agent_name": "{{AGENT_NAME}} Inbound",
+    "response_engine": {
+      "type": "retell-llm",
+      "llm_id": "RETELL_AUTO_GENERATED",
+      "version": 2
+    },
+    "webhook_url": "{{WEBHOOK_URL}}",
+    "language": "en-US",
+    "data_storage_setting": "everything",
+    "opt_in_signed_url": true,
+    "end_call_after_silence_ms": 15000,
+    "is_published": false,
+    "post_call_analysis_model": "gpt-4.1-mini",
+    "pii_config": {
+      "mode": "post_call",
+      "categories": []
+    },
+    "post_call_analysis_data": [
+      {
+        "name": "caller_first_name",
+        "description": "Caller's first name as stated during the call",
+        "type": "string",
+        "examples": ["John", "Maria", ""]
+      },
+      {
+        "name": "caller_last_name",
+        "description": "Caller's last name as stated during the call",
+        "type": "string",
+        "examples": ["Smith", "Garcia", ""]
+      },
+      {
+        "name": "caller_email",
+        "description": "Email address if provided during the call",
+        "type": "string",
+        "examples": ["john@example.com", ""]
+      },
+      {
+        "name": "callback_number",
+        "description": "Preferred callback number if different from caller ID",
+        "type": "string",
+        "examples": ["+13125551234", ""]
+      },
+      {
+        "name": "service_type",
+        "description": "Type of service the caller inquired about",
+        "type": "enum",
+        "choices": ["{{SERVICE_TYPE_1}}", "{{SERVICE_TYPE_2}}", "{{SERVICE_TYPE_3}}", "other", "unknown"]
+      },
+      {
+        "name": "is_existing_client",
+        "description": "Whether the caller identified themselves as an existing client",
+        "type": "boolean"
+      },
+      {
+        "name": "call_outcome",
+        "description": "Final result of the call",
+        "type": "enum",
+        "choices": [
+          "appointment_booked",
+          "callback_requested",
+          "transferred",
+          "question_answered",
+          "not_qualified",
+          "voicemail",
+          "dropped",
+          "caller_hangup",
+          "unknown"
+        ]
+      },
+      {
+        "name": "appointment_datetime",
+        "description": "Booked appointment date and time in ISO 8601 format, if scheduled",
+        "type": "string",
+        "examples": ["2026-02-15T14:00:00", ""]
+      },
+      {
+        "name": "call_sentiment",
+        "description": "Overall caller sentiment observed during the call",
+        "type": "enum",
+        "choices": ["positive", "neutral", "negative", "distressed"]
+      },
+      {
+        "name": "call_summary",
+        "description": "2-3 sentence summary covering the caller's situation, what was discussed, and the outcome",
+        "type": "string",
+        "examples": ["Caller inquired about teeth cleaning services. Qualified and scheduled appointment for Friday at 2pm.", ""]
+      },
+      {
+        "name": "qualified_lead",
+        "description": "Whether the caller qualifies as a lead based on service match and interest level",
+        "type": "boolean"
+      },
+      {
+        "name": "requested_callback",
+        "description": "Whether the caller requested a callback",
+        "type": "boolean"
+      },
+      {
+        "name": "raw_callback_time",
+        "description": "The specific date, time, or timeframe the caller requested for a callback. Leave empty if no specific callback time was discussed.",
+        "type": "string",
+        "examples": ["today at 5:00 PM", "tomorrow morning", "after 3pm", ""]
+      },
+      {
+        "name": "transfer_attempted",
+        "description": "Whether the agent attempted to transfer the call to another person",
+        "type": "boolean"
+      }
+    ],
+    "voice_id": "{{VOICE_ID}}",
+    "enable_backchannel": true,
+    "backchannel_words": ["yeah", "uh-huh", "right", "I see"],
+    "max_call_duration_ms": 900000,
+    "interruption_sensitivity": 0.8,
+    "ambient_sound": "call-center",
+    "ambient_sound_volume": 0,
+    "responsiveness": 0.9,
+    "normalize_for_speech": true,
+    "stt_mode": "accurate",
+    "allow_user_dtmf": true,
+    "user_dtmf_options": {}
+  },
+  "llm": {
+    "llm_id": "RETELL_AUTO_GENERATED",
+    "model": "gpt-4.1",
+    "model_high_priority": true,
+    "general_prompt": "{{SYSTEM_PROMPT}}",
+    "general_tools": [
+      {
+        "name": "transfer_call",
+        "description": "Transfer the call to a staff member or office number. Use the appropriate phone number from your context. Always warn the caller before transferring.",
+        "transfer_destination": {
+          "type": "inferred",
+          "prompt": "Use the transfer number from your conversation context. The number must be in E.164 format (e.g. +13125551234)."
+        },
+        "transfer_option": {
+          "cold_transfer_mode": "sip_refer",
+          "enable_bridge_audio_cue": true,
+          "type": "cold_transfer",
+          "show_transferee_as_caller": true
+        },
+        "type": "transfer_call"
+      },
+      {
+        "name": "end_call",
+        "description": "End the call when the caller says goodbye or you are instructed to do so.",
+        "type": "end_call",
+        "speak_during_execution": true
+      },
+      {
+        "parameter_type": "json",
+        "method": "POST",
+        "timeout_ms": 120000,
+        "speak_after_execution": true,
+        "speak_during_execution": true,
+        "name": "book_appointment",
+        "description": "Book an appointment. Use after collecting all required information (first_name, last_name, date, time) and confirming the date and time with the caller.",
+        "type": "custom",
+        "url": "{{WEBHOOK_URL}}",
+        "execution_message_description": "Ask them to wait while you book the appointment",
+        "parameters": {
+          "type": "object",
+          "required": ["first_name", "last_name", "date", "time", "phone", "email"],
+          "properties": {
+            "first_name": {
+              "type": "string",
+              "description": "The caller's first name"
+            },
+            "last_name": {
+              "type": "string",
+              "description": "The caller's last name"
+            },
+            "date": {
+              "type": "string",
+              "description": "Appointment date as MM/DD/YYYY (e.g. 02/15/2026). Must be in the future."
+            },
+            "time": {
+              "type": "string",
+              "description": "Appointment time as H:MM AM/PM (e.g. 2:00 PM)"
+            },
+            "phone": {
+              "type": "string",
+              "description": "The caller's phone number"
+            },
+            "email": {
+              "type": "string",
+              "description": "The caller's email address"
+            },
+            "notes": {
+              "type": "string",
+              "description": "Brief summary of what the appointment is for"
+            }
+          }
+        }
+      },
+      {
+        "parameter_type": "json",
+        "method": "POST",
+        "timeout_ms": 10000,
+        "speak_after_execution": true,
+        "speak_during_execution": false,
+        "name": "check_availability",
+        "description": "Check available appointment times. Use before offering time slots to the caller.",
+        "type": "custom",
+        "url": "{{WEBHOOK_URL}}",
+        "parameters": {
+          "type": "object",
+          "required": ["date"],
+          "properties": {
+            "date": {
+              "type": "string",
+              "description": "The date to check availability for, as MM/DD/YYYY"
+            }
+          }
+        }
+      }
+    ],
+    "start_speaker": "agent",
+    "begin_message": "Hi, thank you for calling {{COMPANY_NAME}}. This is {{AGENT_NAME}}, how can I help you today?",
+    "default_dynamic_variables": {
+      "current_time": "{{current_time_America/Chicago}}"
+    },
+    "kb_config": {
+      "top_k": 3,
+      "filter_score": 0.6
+    }
+  }
+}

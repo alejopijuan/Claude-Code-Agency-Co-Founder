@@ -9,6 +9,8 @@ last_updated: "2026-03-25"
 staleness_threshold_days: 14
 ---
 
+> **This is a fictional example client for reference.** It shows what a well-maintained client file looks like. Use `/agency-ops:new-client` to create your own.
+
 # Sunrise Dental
 
 > **This is a fictional example client for reference.** It shows what a well-maintained client file looks like after a few weeks of active work. Use it as a model when creating your own client files with `/agency-ops:new-client`.

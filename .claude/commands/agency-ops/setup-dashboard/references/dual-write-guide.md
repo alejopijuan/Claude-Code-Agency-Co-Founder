@@ -40,7 +40,7 @@ Replace:
 |---|---|---|
 | `context/outreach/` | `leads` | (name, company) |
 | `context/pipeline/` | `deals` | (name) |
-| `context/clients/` | `clients` | (name) |
+| `context/clients/{name}/{name}.md` | `clients` | (name) |
 
 ## Field Mapping Per Table
 

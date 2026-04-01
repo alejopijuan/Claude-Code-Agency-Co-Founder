@@ -19,8 +19,8 @@ I'll process your meeting notes into action items, draft a follow-up email, and 
 1. Read `context/agency.md` first for agency identity, communication style (tone, example phrases), and stage.
 2. Read this skill's `learnings.md` BEFORE generating output; adapt based on any preferences or patterns found.
 3. If `$ARGUMENTS` is provided, use it as the client name; otherwise use AskUserQuestion: "Which client was this meeting with?"
-4. Read `context/clients/{client-name}.md` using the lowercase-hyphenated version of the client name.
-5. If the client file does not exist, list available clients from `context/clients/` (excluding `_template.md`) and ask the user to pick one.
+4. Read `context/clients/{client-name}/{client-name}.md` using the lowercase-hyphenated version of the client name.
+5. If the client file does not exist, list subdirectories in `context/clients/` (excluding files like `_template.md`) using `ls -d context/clients/*/` and ask the user to pick one.
 6. This skill WRITES BACK to the client file -- it is the ONLY skill that modifies client context files. All writes are append-only to the Commitments Log and Meeting Notes sections.
 7. Never edit or delete existing rows in the Commitments Log -- only append new rows.
 8. Use AskUserQuestion for each question individually, never batch multiple questions.

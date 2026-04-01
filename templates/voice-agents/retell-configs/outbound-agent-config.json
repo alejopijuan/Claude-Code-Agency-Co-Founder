@@ -1,0 +1,253 @@
+{
+  "_metadata": {
+    "template": true,
+    "source": "Templatized from production Retell outbound agent config",
+    "instructions": "Replace all {{VARIABLES}} before importing to Retell. Fields marked with RETELL_AUTO are generated automatically by Retell when you create the agent -- do not set them manually. This config works for both Speed-to-Lead and Database Reactivation use cases."
+  },
+  "_template_variables": {
+    "AGENT_NAME": "Display name for the agent (e.g., 'Sunrise Dental S2L' or 'Sunrise Dental DBR')",
+    "WEBHOOK_URL": "Your post-call webhook URL (e.g., n8n webhook or backend endpoint)",
+    "VOICE_ID": "Retell voice ID -- see prompt-engineering-elevenlabs.md for recommended voices",
+    "SYSTEM_PROMPT": "Paste the full system prompt from retell-prompts/outbound-system-prompt.md after customizing it",
+    "BEGIN_MESSAGE": "The agent's first spoken message when the call connects (leave empty for outbound calls where the lead speaks first)",
+    "VOICEMAIL_MESSAGE": "Message to leave if the call goes to voicemail",
+    "TIMEZONE": "Timezone for the agent (e.g., America/Chicago)"
+  },
+  "agent": {
+    "agent_id": "RETELL_AUTO_GENERATED",
+    "channel": "voice",
+    "agent_name": "{{AGENT_NAME}} Outbound",
+    "response_engine": {
+      "type": "retell-llm",
+      "llm_id": "RETELL_AUTO_GENERATED",
+      "version": 2
+    },
+    "webhook_url": "{{WEBHOOK_URL}}",
+    "language": "en-US",
+    "data_storage_setting": "everything",
+    "opt_in_signed_url": false,
+    "is_published": false,
+    "post_call_analysis_model": "gpt-4.1-mini",
+    "pii_config": {
+      "mode": "post_call",
+      "categories": []
+    },
+    "analysis_successful_prompt": "Evaluate whether the agent had a successful call with the user. For a successful call, the agent should have a complete conversation with the user, finished the task, and not run into technical issues or caused user frustration. The agent was not blocked by a call screen or encountered voicemail.",
+    "analysis_summary_prompt": "Write a 1-3 sentence summary of the call based on the call transcript. Capture the important information and actions taken during the call.",
+    "analysis_user_sentiment_prompt": "Evaluate the user's sentiment, mood, and satisfaction level.",
+    "post_call_analysis_data": [
+      {
+        "type": "boolean",
+        "name": "do_not_call_again",
+        "description": "Output True if the user requested not to be called or contacted again. Otherwise, output False."
+      },
+      {
+        "type": "boolean",
+        "name": "reached_voicemail",
+        "description": "Output True if the call reached a voicemail or an IVR. Reaching a voicemail can be indicated by certain words at the beginning of the transcript such as 'message', 'leave', 'voicemail', 'reached', 'not available'. Otherwise, output False."
+      },
+      {
+        "type": "boolean",
+        "name": "only_ai_agent_speaking",
+        "description": "Output True if the AI agent is the only one speaking, a voicemail was reached, or an IVR was reached. Otherwise, output False."
+      },
+      {
+        "name": "booking_successful_details",
+        "description": "If the caller confirmed a specific appointment date and time during the call, output the confirmed details. Otherwise, output an empty string. Format: Mon DD, YYYY HH:MM AM/PM. Rules: Only populate if the caller verbally confirmed the date and time. Always use the full absolute date. If the caller selected a time but the call ended before confirmation, output an empty string.",
+        "type": "string",
+        "examples": ["Dec 12, 2026 11:00 AM", ""]
+      },
+      {
+        "type": "boolean",
+        "name": "qualified_lead",
+        "description": "True if the lead is qualified and interested in proceeding. Output False if the user expresses not being interested or hangs up immediately."
+      },
+      {
+        "type": "boolean",
+        "name": "appointment_booked_successfully",
+        "description": "Output True if the caller confirmed a specific appointment date and time after it was read back to them. Output False in all other cases."
+      },
+      {
+        "type": "boolean",
+        "name": "no_answer",
+        "description": "Output True if the transcript is completely empty. Output False if the transcript has any words at all."
+      },
+      {
+        "type": "boolean",
+        "name": "call_back_later",
+        "description": "Output True if the user indicates they cannot or do not want to talk right now and would like to be contacted again later. Output False if user books an appointment, says 'don't call me again', or has a full conversation."
+      },
+      {
+        "type": "boolean",
+        "name": "no_conversation",
+        "description": "Output True if user does not speak or only speaks less than 5 words."
+      },
+      {
+        "name": "raw_callback_time",
+        "description": "When the user asks to be called back, output the exact date and time for the callback in ISO 8601 format with timezone offset. Convert relative times to absolute timestamps using the current time as reference. Rules: Only populate when the user explicitly requests a callback. If the user says 'later' without any time reference, leave empty. Output must always be a time in the future.",
+        "type": "string",
+        "examples": ["2026-03-18T14:00:00-05:00", "2026-03-19T09:00:00-05:00", ""]
+      },
+      {
+        "name": "caller_first_name",
+        "description": "The lead's first name as stated or confirmed during the call. Return empty string if not mentioned.",
+        "type": "string",
+        "examples": ["John", "Maria", ""]
+      },
+      {
+        "name": "caller_last_name",
+        "description": "The lead's last name as stated or confirmed during the call. Return empty string if not mentioned.",
+        "type": "string",
+        "examples": ["Smith", "Garcia", ""]
+      },
+      {
+        "name": "call_outcome",
+        "description": "The final result of the call. Select the outcome that best represents what happened: appointment_booked, callback_scheduled, not_interested, no_answer, no_engagement, opted_out.",
+        "type": "enum",
+        "choices": [
+          "appointment_booked",
+          "callback_scheduled",
+          "not_interested",
+          "no_answer",
+          "no_engagement",
+          "opted_out"
+        ]
+      },
+      {
+        "type": "boolean",
+        "name": "declined_all_options",
+        "description": "True if the lead declined all proposed appointment times and callback offers."
+      },
+      {
+        "type": "boolean",
+        "name": "transfer_attempted",
+        "description": "True if the agent attempted to transfer the call to another person."
+      }
+    ],
+    "voice_id": "{{VOICE_ID}}",
+    "max_call_duration_ms": 900000,
+    "interruption_sensitivity": 0.9,
+    "voicemail_option": {
+      "action": {
+        "type": "static_text",
+        "text": "{{VOICEMAIL_MESSAGE}}"
+      }
+    },
+    "allow_user_dtmf": true,
+    "user_dtmf_options": {},
+    "webhook_events": ["call_analyzed", "call_ended", "call_started"]
+  },
+  "llm": {
+    "llm_id": "RETELL_AUTO_GENERATED",
+    "model": "gpt-4.1",
+    "general_prompt": "{{SYSTEM_PROMPT}}",
+    "general_tools": [
+      {
+        "type": "end_call",
+        "name": "end_call",
+        "description": "End the call when user says goodbye or you are instructed to do so."
+      },
+      {
+        "parameter_type": "json",
+        "method": "POST",
+        "timeout_ms": 120000,
+        "speak_after_execution": true,
+        "speak_during_execution": true,
+        "name": "book_appointment",
+        "description": "Book an appointment. Use after collecting all required information and confirming the date and time with the caller.",
+        "type": "custom",
+        "url": "{{WEBHOOK_URL}}",
+        "execution_message_description": "Ask them to wait while you book the appointment",
+        "parameters": {
+          "type": "object",
+          "required": ["first_name", "last_name", "date", "time", "phone", "email"],
+          "properties": {
+            "first_name": {
+              "type": "string",
+              "description": "The caller's first name"
+            },
+            "last_name": {
+              "type": "string",
+              "description": "The caller's last name"
+            },
+            "date": {
+              "type": "string",
+              "description": "Appointment date as MM/DD/YYYY. Must be in the future."
+            },
+            "time": {
+              "type": "string",
+              "description": "Appointment time as H:MM AM/PM"
+            },
+            "phone": {
+              "type": "string",
+              "description": "The caller's phone number"
+            },
+            "email": {
+              "type": "string",
+              "description": "The caller's email address"
+            },
+            "notes": {
+              "type": "string",
+              "description": "Brief summary of what the appointment is for"
+            }
+          }
+        }
+      },
+      {
+        "parameter_type": "json",
+        "method": "POST",
+        "timeout_ms": 10000,
+        "speak_after_execution": true,
+        "speak_during_execution": false,
+        "name": "check_availability",
+        "description": "Check available appointment times for a given date.",
+        "type": "custom",
+        "url": "{{WEBHOOK_URL}}",
+        "parameters": {
+          "type": "object",
+          "required": ["date"],
+          "properties": {
+            "date": {
+              "type": "string",
+              "description": "The date to check availability for, as MM/DD/YYYY"
+            }
+          }
+        }
+      },
+      {
+        "parameter_type": "json",
+        "method": "POST",
+        "timeout_ms": 120000,
+        "speak_after_execution": true,
+        "speak_during_execution": false,
+        "name": "send_booking_link",
+        "description": "Send the appointment booking link via SMS if caller prefers self-scheduling or if booking fails.",
+        "type": "custom",
+        "url": "{{WEBHOOK_URL}}",
+        "parameters": {
+          "type": "object",
+          "required": ["message", "phonenumber"],
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "The full text content of the SMS message including the booking link"
+            },
+            "phonenumber": {
+              "type": "string",
+              "description": "The phone number to send the SMS to"
+            }
+          }
+        }
+      }
+    ],
+    "start_speaker": "user",
+    "begin_message": "{{BEGIN_MESSAGE}}",
+    "default_dynamic_variables": {
+      "current_time": "{{current_time_America/Chicago}}"
+    },
+    "kb_config": {
+      "top_k": 3,
+      "filter_score": 0.6
+    }
+  }
+}

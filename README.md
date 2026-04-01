@@ -38,12 +38,11 @@ Built by [Amplify Voice AI](https://skool.com/amplify-voice-ai) for the communit
 
 ## What You Get
 
-- **Personalized agency identity** -- your niche, services, pricing, communication style
-- **Client context files** -- structured files Claude reads for every interaction
-- **13 operations skills** -- client briefings, meeting prep, follow-ups, outreach, pipeline, proposals, dashboard setup, and more
-- **Self-learning system** -- skills improve as you use them
-- **Agency dashboard** -- local HTML dashboard for outreach funnel, pipeline, and client health visualization
-- **GSD framework** -- plan and build voice AI systems for your clients with `/gsd:new-project`
+- **Personalized agency identity** — your niche, services, pricing, communication style
+- **Client context files** — structured files Claude reads for every interaction
+- **12 operations skills** — client briefings, meeting prep, follow-ups, outreach, pipeline, proposals, and more
+- **Self-learning system** — skills improve as you use them
+- **GSD framework** — plan and build voice AI systems for your clients with `/gsd:new-project`
 
 ## Available Skills
 

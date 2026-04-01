@@ -19,7 +19,7 @@ I'll help you create proposals, follow-up emails, and fill contract templates fo
 1. Read `context/agency.md` first for agency name, niche, pricing, services, and communication style.
 2. Read this skill's `learnings.md` BEFORE generating any output. Adapt to any patterns or preferences found.
 3. If `$ARGUMENTS` is provided, use it as the client name. Otherwise use `AskUserQuestion` to ask for the client name.
-4. Read `context/clients/{client-name}.md` for client-specific context (project scope, contacts, monthly value, use case).
+4. Read `context/clients/{client-name}/{client-name}.md` for client-specific context (project scope, contacts, monthly value, use case).
 5. If client file doesn't exist, offer to create one via `/agency-ops:new-client` or proceed with manual input.
 6. This skill is read-only for client and agency files -- it does NOT modify them.
 7. Read `templates/proposals/` for template references when filling SOW, service agreement, or onboarding checklist.

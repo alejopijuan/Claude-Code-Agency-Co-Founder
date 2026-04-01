@@ -203,7 +203,7 @@ Read all files in `context/pipeline/` excluding `_template.md`. For each file, p
 
 ### Clients (context/clients/)
 
-Read all files in `context/clients/` excluding `_template.md` and `_example-client-sunrise-dental.md`. For each file, parse the YAML frontmatter and extract: `name`, `industry`, `status`, `monthly_value`, `start_date`, `meeting_cadence`, `last_updated`, `staleness_threshold_days`, `open_commitments_count`, `next_meeting_date`. Build a JSON array of all clients.
+Read the main `.md` file from each subdirectory in `context/clients/`. List subdirs with `ls -d context/clients/*/`, then read `{dir}/{dir-basename}.md` for each. Exclude any files at the root level like `_template.md`. For each client file, parse the YAML frontmatter and extract: `name`, `industry`, `status`, `monthly_value`, `start_date`, `meeting_cadence`, `last_updated`, `staleness_threshold_days`, `open_commitments_count`, `next_meeting_date`. Build a JSON array of all clients.
 
 ### Execute sync
 

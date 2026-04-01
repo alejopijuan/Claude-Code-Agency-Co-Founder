@@ -1,6 +1,6 @@
 ---
 name: agency-ops:lead-gen
-description: Guide lead generation pipeline setup for your niche
+description: Guide lead generation strategy selection for your niche
 argument-hint: ""
 disable-model-invocation: false
 allowed-tools:
@@ -10,137 +10,89 @@ allowed-tools:
   - AskUserQuestion
 ---
 
-# Lead Generation Guide
+# Lead Generation -- Strategy Guide
 
-I'll help you set up a lead generation pipeline for your niche. We'll figure out who to target, how to find them, and how to build a repeatable system for filling your outreach pipeline.
+I'll help you develop a lead generation strategy for your niche. We'll figure out which approaches will work best for your stage and market, then create a plan to start filling your outreach pipeline.
 
 ## Rules
 
-1. Read `context/agency.md` to understand the user's agency context (niche, stage, target market).
-2. Read this skill's `learnings.md` for any accumulated preferences or patterns.
-3. No client argument needed -- this skill is about finding NEW leads, not working with existing clients.
-4. If the user has an existing outreach directory (`context/outreach/`), scan it to understand what niches and channels they are already working.
+1. Read `context/agency.md` for niche, stage, target market.
+2. Read this skill's `learnings.md` for accumulated preferences or patterns.
+3. No client argument needed -- this skill finds NEW leads.
+4. If outreach directory exists (`context/outreach/`), scan to understand current activity.
+5. Do NOT proactively suggest scraping or Google Maps as a lead gen strategy. If the user specifically asks about scraping, THEN reference `templates/lead-gen/google-maps-scraping.md`.
 
-## Pipeline Assessment
+## Stage 1: Strategy Assessment
 
-Ask the user about their lead generation needs to recommend the right approach. Use `AskUserQuestion` for each question individually.
+Use `AskUserQuestion` for each question individually.
 
-### Question 1: Target Niche
+### Question 1: Current State
 
-"What niche are you targeting for lead generation?"
-- Dental practices
-- Medical spas / aesthetics
-- Roofing companies
-- HVAC / home services
-- Law firms
-- Real estate agencies
-- Other (describe)
+"Where are you with lead gen right now?"
+- Haven't started yet
+- Doing some outreach but want to be more systematic
+- Have a pipeline but want to scale it
+- Tried some things that didn't work (what?)
 
-If the user's `agency.md` already specifies a niche, confirm it: "I see you're focused on [niche]. Are you looking for leads in that niche, or exploring a new one?"
+### Question 2: Target Niche
 
-### Question 2: Geographic Focus
+Confirm from agency.md or ask: "What niche are you targeting?"
+
+### Question 3: Geographic Focus
 
 "What city or region are you targeting?"
-- Specific city (e.g., "Miami" or "Denver metro area")
-- Specific state or region
-- Multiple cities (list them)
-- National (not recommended for starting out -- suggest narrowing down)
 
-### Question 3: Volume and Cadence
+### Question 4: Goals
 
 "How many new leads do you need per week?"
-- 5-10 (starting out, testing messaging)
-- 10-25 (active outreach, building pipeline)
-- 25-50 (scaling, multiple outreach channels)
-- 50+ (high volume, likely need automation)
+- 5-10 (starting, testing messaging)
+- 10-25 (active outreach)
+- 25-50 (scaling)
 
-## Lead Generation Approaches
+## Stage 2: Strategy Recommendation
 
-Based on the assessment, recommend the right approach:
+Read `templates/lead-gen/lead-gen-strategy.md`.
 
-### Google Maps Scraping (Rankwell V2 Pattern)
+Based on the assessment, recommend the strategy mix from the guide:
+- Match to their stage (starting out, getting traction, scaling)
+- Match to their niche (use niche-specific playbook from the guide if available)
+- Prioritize by conversion rate and effort level
 
-**Best for:** Local businesses in any service niche -- dental, roofing, HVAC, med spa, law firms, auto repair, restaurants.
+Present 2-3 recommended strategies with reasoning. Use the strategy selection framework from the guide to explain why these strategies fit their situation.
 
-**How it works:**
-1. Define search terms based on the user's niche and location (e.g., "dentist Miami FL", "HVAC contractor Denver CO").
-2. Use Apify's Google Maps scraper to extract business listings.
-3. Filter results by quality signals: minimum review count, has a website, has a phone number, not a chain/franchise.
-4. Score leads by fit: businesses with 50-200 reviews are ideal (established but not too big), negative reviews mentioning "couldn't reach" or "no one answered" signal missed-call pain.
-5. Export filtered list for outreach via `/agency-ops:outreach`.
+## Stage 3: Action Plan
 
-**Recommended search terms by niche:**
+For each recommended strategy, provide actionable next steps using `AskUserQuestion` to confirm priorities:
 
-| Niche | Primary Search | Secondary Search |
-|-------|---------------|-----------------|
-| Dental | "dentist [city]", "dental office [city]" | "cosmetic dentist [city]", "family dentist [city]" |
-| Med Spa | "med spa [city]", "medspa [city]" | "botox [city]", "aesthetics clinic [city]" |
-| Roofing | "roofing company [city]", "roofer [city]" | "roof repair [city]", "roofing contractor [city]" |
-| HVAC | "HVAC [city]", "air conditioning [city]" | "heating repair [city]", "AC company [city]" |
-| Law Firms | "personal injury lawyer [city]", "law firm [city]" | "family lawyer [city]", "criminal defense [city]" |
-| Real Estate | "real estate agent [city]", "realtor [city]" | "property management [city]" |
+- **What to do this week** -- specific, concrete actions (not vague advice)
+- **What tools or resources to set up** -- LinkedIn profile optimization, email templates, networking events calendar
+- **How to track results** -- reference `/agency-ops:outreach` for tracking outreach activity
+- **When to evaluate and adjust** -- set a review date (usually 2-4 weeks)
 
-**Estimated lead volume:** A single city search typically returns 50-200 results before filtering. After quality filtering, expect 20-60 viable leads per search.
+## Stage 4: Output
 
-**Apify cost estimate:** Google Maps scraper runs cost approximately $1-3 per 100 results. A typical monthly pipeline of 200 leads costs around $5-10 in Apify credits.
+Show a summary strategy plan with:
+- Recommended strategies ranked by priority
+- Weekly action items for the first 2 weeks
+- Metrics to track (leads generated, replies, calls booked)
+- Review date to evaluate what's working
 
-**Filtering criteria (recommended defaults):**
-- Has a website (required -- you need to research them before outreach)
-- Has a phone number (required -- voice AI needs a phone system)
-- Minimum 10 Google reviews (indicates established business)
-- Maximum 500 reviews (too large = corporate decision-making, harder to close)
-- Not a franchise or national chain (check business name against known chains)
-- No existing chatbot or AI visible on website (quick manual check during outreach)
+Offer to create a lead gen tracking file if the user wants one.
 
-### Complementary Approaches
-
-**LinkedIn Search (manual, no scraping):**
-- Search for business owners or office managers in the target niche and city.
-- Use connection notes to introduce yourself (templates available via `/agency-ops:outreach`).
-- Best paired with Google Maps data -- find the business on Maps, then find the owner on LinkedIn for a warm approach.
-
-**Referral Mining:**
-- Ask existing clients: "Do you know any other [niche] owners who struggle with [missed calls / slow lead response]?"
-- Offer a referral incentive (one month free, gift card, etc.).
-- Highest conversion rate of any lead source, but low volume.
-
-## Recommendation Output
-
-After the assessment, provide the user with:
-
-1. **Recommended search terms** tailored to their specific niche and geographic focus.
-2. **Estimated lead volume** based on their niche and city size.
-3. **Filtering criteria** customized for their niche (some niches have different review thresholds or red flags).
-4. **Cost estimate** for Apify credits based on their target volume.
-5. **Suggested outreach workflow:**
-   - Scrape leads weekly (or bi-weekly).
-   - Filter and score new leads.
-   - Add top leads to outreach tracking with `/agency-ops:outreach`.
-   - Follow the 3-5-7-14 day follow-up cadence.
-6. **Quick start steps:**
-   - Sign up for Apify (free tier includes enough credits to start).
-   - Run the first scrape with the recommended search terms.
-   - Review results and adjust filtering criteria.
-   - Pick the top 10 leads and start outreach.
-
-## Phase 4 Note
-
-Detailed lead gen pipeline templates with Apify actor configuration, automated filtering scripts, cost breakdowns by niche, and integration with n8n for automated scrape-to-outreach workflows are coming in Phase 4.
-
-For now, use this guidance to plan your approach, run manual scrapes via Apify's web interface, and start tracking leads with `/agency-ops:outreach`.
+Reference: "Track your outreach with `/agency-ops:outreach` and pipeline with `/agency-ops:pipeline`."
 
 ## Stage-Gated Adjustments
 
-- **Starting out (0 clients):** Focus on ONE niche in ONE city. Get 20-30 leads, work through them all before scraping more. The goal is to find your first client, not build a massive pipeline. Manual Apify runs are fine at this stage.
-- **Getting traction (1-3 clients):** Expand to 2-3 cities in the same niche. Increase volume to 50-100 leads per month. Start tracking conversion rates (leads to replies, replies to calls, calls to clients) to optimize your targeting.
-- **Scaling (5+ clients):** Automate the scrape-to-outreach pipeline with n8n (Phase 4 templates). Expand to multiple niches if your delivery model supports it. Consider hiring a VA to handle initial outreach while you focus on discovery calls.
+- **Starting out (0 clients):** Focus on referrals + LinkedIn warm outreach. Your ONLY goal is closing your first client. Keep it simple -- 10-20 prospects, personal messages, no automation.
+- **Getting traction (1-3 clients):** Add partnerships + content marketing. Leverage your existing client results as case studies. Expand to 2-3 outreach channels.
+- **Scaling (5+ clients):** All strategies active. Optimize based on data. Consider cold email at volume. Track conversion rates across channels to double down on what works.
 
 ## Learnings Update
 
-After completing the assessment, append a learning entry to this skill's `learnings.md`:
+After completing the assessment, append a learning entry to `learnings.md`:
 
 ```markdown
-- **[date]** [tag:lead-gen] [niche/city context]: [what was recommended, search terms that worked, filtering adjustments, any user feedback]
+- **[date]** [tag:lead-gen] [niche/city]: [strategies recommended, user feedback, adjustments]
 ```
 
-Keep entries concise. Focus on niche-specific insights (e.g., "dental in Miami: 180 results, filtered to 45 viable leads. Exclude orthodontists -- they have different decision-making structure").
+Keep entries concise. Focus on niche-specific insights and which strategies resonated with the user.

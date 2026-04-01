@@ -1,4 +1,14 @@
 {
+  "permissions": {
+    "allow": [
+      "Edit",
+      "Write",
+      "Read",
+      "Glob",
+      "Grep",
+      "Bash(node:*)"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {
@@ -38,13 +48,5 @@
   "statusLine": {
     "type": "command",
     "command": "node .claude/hooks/gsd-statusline.js"
-  },
-  "allowedTools": [
-    "Edit",
-    "Write",
-    "Read",
-    "Glob",
-    "Grep",
-    "Bash(node:*)"
-  ]
+  }
 }

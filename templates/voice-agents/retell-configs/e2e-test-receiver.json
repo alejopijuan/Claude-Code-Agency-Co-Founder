@@ -1,0 +1,60 @@
+{
+  "_metadata": {
+    "template": true,
+    "source": "Templatized from production Retell E2E test receiver config",
+    "instructions": "This agent simulates a CALLER receiving a call from your voice agent. Use it to test your inbound or outbound agent by having this agent act as a realistic caller with a specific scenario. Replace {{VARIABLES}} in default_dynamic_variables to configure test scenarios."
+  },
+  "_template_variables": {
+    "CALLER_NAME": "Name the test caller will use (e.g., 'Sarah Kim')",
+    "CALLER_LOCATION": "Where the test caller says they are from",
+    "SERVICE_ISSUE": "What the test caller is inquiring about (e.g., 'teeth cleaning', 'AC repair')",
+    "BUDGET_RESPONSE": "How the test caller responds to pricing questions",
+    "SCHEDULING_RESPONSE": "How the test caller responds to appointment offers",
+    "SCENARIO_INSTRUCTIONS": "Detailed behavioral instructions for this test scenario",
+    "BUSINESS_TYPE": "Type of business being called (e.g., 'dental office', 'law firm', 'HVAC company')"
+  },
+  "agent": {
+    "agent_id": "RETELL_AUTO_GENERATED",
+    "channel": "voice",
+    "agent_name": "E2E Test Receiver",
+    "response_engine": {
+      "type": "retell-llm",
+      "llm_id": "RETELL_AUTO_GENERATED",
+      "version": 0
+    },
+    "language": "en-US",
+    "data_storage_setting": "everything",
+    "opt_in_signed_url": false,
+    "is_published": false,
+    "post_call_analysis_model": "gpt-4.1-mini",
+    "pii_config": {
+      "mode": "post_call",
+      "categories": []
+    },
+    "voice_id": "{{VOICE_ID}}",
+    "max_call_duration_ms": 360000,
+    "allow_user_dtmf": true,
+    "user_dtmf_options": {}
+  },
+  "llm": {
+    "llm_id": "RETELL_AUTO_GENERATED",
+    "version": 0,
+    "model": "gpt-4.1",
+    "general_prompt": "You are {{CALLER_NAME}}, a person receiving a phone call from a {{BUSINESS_TYPE}} about a matter you recently inquired about.\n\nYour situation:\n- You live in {{CALLER_LOCATION}}\n- Your issue: {{SERVICE_ISSUE}}\n- When asked about budget or fees: {{BUDGET_RESPONSE}}\n- When offered appointment times: {{SCHEDULING_RESPONSE}}\n\nAdditional instructions: {{SCENARIO_INSTRUCTIONS}}\n\nGuidelines:\n- Keep responses brief (1-2 sentences max)\n- Don't volunteer information unless asked directly\n- Answer honestly based on your scenario details above\n- Sound natural and conversational, like a real person on the phone\n- If asked for your name, give {{CALLER_NAME}}\n- If asked for your phone number, say you'd rather not give it over the phone\n- IMPORTANT EMAIL RULE: If asked for your email, say \"I'd rather not give my email right now, you can just call me back at this number.\" Do NOT spell out any email address.\n- If the conversation seems to be going in circles or repeating, say \"I think we've covered everything, thanks for calling\" and end the conversation",
+    "start_speaker": "agent",
+    "begin_message": "Hello?",
+    "default_dynamic_variables": {
+      "CALLER_NAME": "Sarah Kim",
+      "CALLER_LOCATION": "Downtown area",
+      "SCENARIO_INSTRUCTIONS": "You are interested but busy right now. Ask if they can call you back tomorrow afternoon. Be polite but firm that now is not a good time. Do NOT give your email address. If asked for contact info, say 'just call me back on this number'. Keep responses to 1-2 sentences max.",
+      "SERVICE_ISSUE": "general inquiry",
+      "BUDGET_RESPONSE": "I need to think about the fees",
+      "SCHEDULING_RESPONSE": "Can you call me back tomorrow instead?",
+      "BUSINESS_TYPE": "business"
+    },
+    "kb_config": {
+      "top_k": 3,
+      "filter_score": 0.6
+    }
+  }
+}

@@ -19,8 +19,8 @@ I'll generate a compact briefing for your client so you're prepared for any inte
 1. Read `context/agency.md` first for agency identity, niche, communication style, and stage.
 2. Read this skill's `learnings.md` BEFORE generating output; adapt based on any preferences or patterns found.
 3. If `$ARGUMENTS` is provided, use it as the client name; otherwise use AskUserQuestion to ask "Which client do you want a briefing for?"
-4. Read `context/clients/{client-name}.md` using the lowercase-hyphenated version of the client name.
-5. If client file does not exist, list available clients from `context/clients/` (excluding `_template.md`) and ask the user to pick one.
+4. Read `context/clients/{client-name}/{client-name}.md` using the lowercase-hyphenated version of the client name.
+5. If client file does not exist, list subdirectories in `context/clients/` (excluding files like `_template.md`) using `ls -d context/clients/*/` and ask the user to pick one.
 6. Output must be compact -- key data highlighted, not walls of text.
 7. Use AskUserQuestion for each question individually, never batch.
 
