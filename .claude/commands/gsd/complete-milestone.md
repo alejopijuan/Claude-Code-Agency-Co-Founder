@@ -19,8 +19,8 @@ Output: Milestone archived (roadmap + requirements), PROJECT.md evolved, git tag
 <execution_context>
 **Load these files NOW (before proceeding):**
 
-- @/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/workflows/complete-milestone.md (main workflow)
-- @/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/templates/milestone-archive.md (archive template)
+- @/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/workflows/complete-milestone.md (main workflow)
+- @/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/templates/milestone-archive.md (archive template)
   </execution_context>
 
 <context>

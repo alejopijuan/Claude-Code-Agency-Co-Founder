@@ -1,4 +1,4 @@
-# Claude Code Agency Co-Founder
+# Agency Ops Hub
 
 A Claude Code-powered command center for voice AI agency operators.
 
@@ -38,11 +38,11 @@ Built by [Amplify Voice AI](https://skool.com/amplify-voice-ai) for the communit
 
 ## What You Get
 
-- **Personalized agency identity** — your niche, services, pricing, communication style
-- **Client context files** — structured files Claude reads for every interaction
-- **12 operations skills** — client briefings, meeting prep, follow-ups, outreach, pipeline, proposals, and more
-- **Self-learning system** — skills improve as you use them
-- **GSD framework** — plan and build voice AI systems for your clients with `/gsd:new-project`
+- **Personalized agency identity** -- your niche, services, pricing, communication style
+- **Client context files** -- structured files Claude reads for every interaction
+- **14 operations skills** -- client briefings, meeting prep, follow-ups, outreach, pipeline, proposals, prompt trimming, and more
+- **Self-learning system** -- skills improve as you use them
+- **GSD framework** -- plan and build voice AI systems for your clients with `/gsd:new-project`
 
 ## Available Skills
 
@@ -57,7 +57,8 @@ Built by [Amplify Voice AI](https://skool.com/amplify-voice-ai) for the communit
 | `/agency-ops:outreach` | Track and manage outreach |
 | `/agency-ops:pipeline` | View and manage deal pipeline |
 | `/agency-ops:proposal` | Generate proposals and artifacts |
-| `/agency-ops:voice-agent` | Guide voice agent template selection |
+| `/agency-ops:voice-agent` | Guide voice agent template selection and model-specific prompt creation |
+| `/agency-ops:prompt-trim` | Trim voice agent prompts with 3 optimization tiers |
 | `/agency-ops:system-build` | Guide n8n system template selection |
 | `/agency-ops:lead-gen` | Guide lead gen pipeline setup |
 | `/agency-ops:setup-dashboard` | Connect dashboard to Supabase |

@@ -16,8 +16,8 @@ Use when you know what you want but don't know which `/gsd:*` command to run.
 </objective>
 
 <execution_context>
-@/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/workflows/do.md
-@/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/references/ui-brand.md
+@/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/workflows/do.md
+@/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/references/ui-brand.md
 </execution_context>
 
 <context>
@@ -25,6 +25,6 @@ $ARGUMENTS
 </context>
 
 <process>
-Execute the do workflow from @/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/workflows/do.md end-to-end.
+Execute the do workflow from @/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/workflows/do.md end-to-end.
 Route user intent to the best GSD command and invoke it.
 </process>

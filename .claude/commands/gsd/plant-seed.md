@@ -20,9 +20,9 @@ Consumed by: /gsd:new-milestone (scans seeds and presents matches)
 </objective>
 
 <execution_context>
-@/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/workflows/plant-seed.md
+@/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/workflows/plant-seed.md
 </execution_context>
 
 <process>
-Execute the plant-seed workflow from @/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/workflows/plant-seed.md end-to-end.
+Execute the plant-seed workflow from @/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/workflows/plant-seed.md end-to-end.
 </process>

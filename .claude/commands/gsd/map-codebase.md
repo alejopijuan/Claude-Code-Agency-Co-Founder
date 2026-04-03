@@ -20,7 +20,7 @@ Output: .planning/codebase/ folder with 7 structured documents about the codebas
 </objective>
 
 <execution_context>
-@/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/workflows/map-codebase.md
+@/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/workflows/map-codebase.md
 </execution_context>
 
 <context>

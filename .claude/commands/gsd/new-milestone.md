@@ -25,11 +25,11 @@ Brownfield equivalent of new-project. Project exists, PROJECT.md has history. Ga
 </objective>
 
 <execution_context>
-@/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/workflows/new-milestone.md
-@/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/references/questioning.md
-@/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/references/ui-brand.md
-@/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/templates/project.md
-@/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/templates/requirements.md
+@/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/workflows/new-milestone.md
+@/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/references/questioning.md
+@/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/references/ui-brand.md
+@/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/templates/project.md
+@/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/templates/requirements.md
 </execution_context>
 
 <context>
@@ -39,6 +39,6 @@ Project and milestone context files are resolved inside the workflow (`init new-
 </context>
 
 <process>
-Execute the new-milestone workflow from @/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/workflows/new-milestone.md end-to-end.
+Execute the new-milestone workflow from @/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/workflows/new-milestone.md end-to-end.
 Preserve all workflow gates (validation, questioning, research, requirements, roadmap approval, commits).
 </process>

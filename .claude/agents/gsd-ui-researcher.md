@@ -203,7 +203,7 @@ Scan the output for suspicious patterns:
 
 ## Output: UI-SPEC.md
 
-Use template from `/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/templates/UI-SPEC.md`.
+Use template from `/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/templates/UI-SPEC.md`.
 
 Write to: `$PHASE_DIR/$PADDED_PHASE-UI-SPEC.md`
 
@@ -262,14 +262,14 @@ Batch questions into a single interaction where possible.
 
 ## Step 5: Compile UI-SPEC.md
 
-Read template: `/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/templates/UI-SPEC.md`
+Read template: `/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/templates/UI-SPEC.md`
 
 Fill all sections. Write to `$PHASE_DIR/$PADDED_PHASE-UI-SPEC.md`.
 
 ## Step 6: Commit (optional)
 
 ```bash
-node "/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/bin/gsd-tools.cjs" commit "docs($PHASE): UI design contract" --files "$PHASE_DIR/$PADDED_PHASE-UI-SPEC.md"
+node "/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/bin/gsd-tools.cjs" commit "docs($PHASE): UI design contract" --files "$PHASE_DIR/$PADDED_PHASE-UI-SPEC.md"
 ```
 
 ## Step 7: Return Structured Result

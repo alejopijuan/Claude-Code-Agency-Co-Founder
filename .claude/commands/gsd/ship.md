@@ -17,7 +17,7 @@ Closes the plan → execute → verify → ship loop.
 </objective>
 
 <execution_context>
-@/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/workflows/ship.md
+@/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/workflows/ship.md
 </execution_context>
 
-Execute the ship workflow from @/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/workflows/ship.md end-to-end.
+Execute the ship workflow from @/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/workflows/ship.md end-to-end.

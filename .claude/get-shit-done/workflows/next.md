@@ -14,7 +14,7 @@ Read project state to determine current position:
 
 ```bash
 # Get state snapshot
-node "/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/bin/gsd-tools.cjs" state json 2>/dev/null || echo "{}"
+node "/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/bin/gsd-tools.cjs" state json 2>/dev/null || echo "{}"
 ```
 
 Also read:

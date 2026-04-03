@@ -1,14 +1,4 @@
 {
-  "permissions": {
-    "allow": [
-      "Edit",
-      "Write",
-      "Read",
-      "Glob",
-      "Grep",
-      "Bash(node:*)"
-    ]
-  },
   "hooks": {
     "SessionStart": [
       {

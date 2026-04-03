@@ -1,11 +1,10 @@
 <!-- Reference: GPT 4.1 Voice Agent Prompt Engineering -->
-<!-- Source: /prompt-voice-agent skill (copied into project for product repo distribution) -->
-<!-- Used by: /agency-ops:voice-agent skill during prompt creation stage -->
+<!-- Source: AV Master Prompting Guide GPT 4.1 -->
+<!-- Used by: /agency-ops:voice-agent (Stage 4) and /agency-ops:prompt-trim -->
 
 ---
-name: prompt-voice-agent
+name: prompt-engineering-gpt41
 description: Create new voice agent prompts or audit existing prompts for GPT 4.1-powered real-time voice agents - guided discovery, best practices, testing prep, and iterative refinement
-user-invocable: true
 ---
 
 ## Role & Objective

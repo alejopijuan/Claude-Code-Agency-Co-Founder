@@ -1,4 +1,4 @@
-# Claude Code Agency Co-Founder
+# Agency Ops Hub
 
 A Claude Code-powered command center for voice AI agency operators. Built by Amplify Voice AI.
 
@@ -12,12 +12,12 @@ This is a guided conversation that asks about your niche, experience level, clie
 
 This project helps voice AI agency operators acquire their next client and deliver successfully. It provides:
 
-- **Personalized agency identity** — your niche, services, pricing, communication style
-- **Client context management** — structured files that Claude reads for every interaction
-- **Operations skills** — slash commands for client briefings, meeting prep, follow-ups, outreach, pipeline tracking, and proposals
-- **Self-learning architecture** — skills that get better as you use them, learning your preferences and patterns
-- **Delivery templates** — voice agent design docs, system architecture guides, lead gen pipeline templates
-- **GSD development framework** — use `/gsd:new-project` to plan and build voice AI systems for your clients
+- **Personalized agency identity** -- your niche, services, pricing, communication style
+- **Client context management** -- structured files that Claude reads for every interaction
+- **Operations skills** -- slash commands for client briefings, meeting prep, follow-ups, outreach, pipeline tracking, and proposals
+- **Self-learning architecture** -- skills that get better as you use them, learning your preferences and patterns
+- **Delivery templates** -- voice agent design docs, system architecture guides, lead gen pipeline templates
+- **GSD development framework** -- use `/gsd:new-project` to plan and build voice AI systems for your clients
 
 ## Available Skills
 
@@ -32,7 +32,8 @@ This project helps voice AI agency operators acquire their next client and deliv
 | `/agency-ops:outreach` | Track and manage outreach | Daily outreach sessions |
 | `/agency-ops:pipeline` | View and manage deal pipeline | Reviewing sales progress |
 | `/agency-ops:proposal` | Generate proposals + artifacts | After discovery calls |
-| `/agency-ops:voice-agent` | Guide voice agent design, customization, and Retell prompt creation | When building a voice agent for a client |
+| `/agency-ops:voice-agent` | Guide voice agent design, customization, and model-specific Retell prompt creation | When building a voice agent for a client |
+| `/agency-ops:prompt-trim` | Trim voice agent prompts with 3 tiers (conservative/moderate/aggressive) | When a prompt exceeds token targets, or to optimize an existing prompt |
 | `/agency-ops:system-build` | Guide n8n system architecture selection and customization | When building automations for a client |
 | `/agency-ops:lead-gen` | Guide lead generation strategy selection for your niche | When setting up prospecting |
 | `/agency-ops:setup-dashboard` | Connect dashboard to Supabase | When setting up live data visualization |
@@ -47,7 +48,7 @@ Decision framework for how Claude operates in this project:
 
 ## Self-Learning
 
-Every skill directory contains `learnings.md` (accumulated knowledge with 30-entry cap) and `references/` (templates, examples). Skills compound through use — the more you use them, the better they get at understanding your preferences and patterns.
+Every skill directory contains `learnings.md` (accumulated knowledge with 30-entry cap) and `references/` (templates, examples). Skills compound through use -- the more you use them, the better they get at understanding your preferences and patterns.
 
 ## Delivery Templates
 
@@ -84,6 +85,7 @@ Claude-Code-Agency-Co-Founder/
       pipeline/
       proposal/
       voice-agent/
+      prompt-trim/
       system-build/
       lead-gen/
       setup-dashboard/

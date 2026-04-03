@@ -23,7 +23,7 @@ Routes to the add-todo workflow which handles:
 </objective>
 
 <execution_context>
-@/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/workflows/add-todo.md
+@/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/workflows/add-todo.md
 </execution_context>
 
 <context>
@@ -33,7 +33,7 @@ State is resolved in-workflow via `init todos` and targeted reads.
 </context>
 
 <process>
-**Follow the add-todo workflow** from `@/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/workflows/add-todo.md`.
+**Follow the add-todo workflow** from `@/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/workflows/add-todo.md`.
 
 The workflow handles all logic including:
 1. Directory ensuring

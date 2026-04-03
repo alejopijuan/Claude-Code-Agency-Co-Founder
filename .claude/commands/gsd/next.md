@@ -16,9 +16,9 @@ Designed for rapid multi-project workflows where remembering which phase/step yo
 </objective>
 
 <execution_context>
-@/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/workflows/next.md
+@/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/workflows/next.md
 </execution_context>
 
 <process>
-Execute the next workflow from @/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/workflows/next.md end-to-end.
+Execute the next workflow from @/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/workflows/next.md end-to-end.
 </process>

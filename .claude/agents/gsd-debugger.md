@@ -432,11 +432,11 @@ git bisect bad              # or good, based on testing
 ```
 Check code says:  hooksDir = path.join(configDir, 'hooks')
                   configDir = ~/.claude
-                  → checks /Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/hooks/
+                  → checks /Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/hooks/
 
 Installer says:   hooksDest = path.join(targetDir, 'hooks')
-                  targetDir = /Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done
-                  → writes to /Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/hooks/
+                  targetDir = /Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done
+                  → writes to /Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/hooks/
 
 MISMATCH: Checker looks in wrong directory → hooks "not found" → reported as stale
 ```
@@ -1122,7 +1122,7 @@ mv .planning/debug/{slug}.md .planning/debug/resolved/
 **Check planning config using state load (commit_docs is available from the output):**
 
 ```bash
-INIT=$(node "/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/bin/gsd-tools.cjs" state load)
+INIT=$(node "/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/bin/gsd-tools.cjs" state load)
 if [[ "$INIT" == @file:* ]]; then INIT=$(cat "${INIT#@file:}"); fi
 # commit_docs is in the JSON output
 ```
@@ -1140,7 +1140,7 @@ Root cause: {root_cause}"
 
 Then commit planning docs via CLI (respects `commit_docs` config automatically):
 ```bash
-node "/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/bin/gsd-tools.cjs" commit "docs: resolve debug {slug}" --files .planning/debug/resolved/{slug}.md
+node "/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/bin/gsd-tools.cjs" commit "docs: resolve debug {slug}" --files .planning/debug/resolved/{slug}.md
 ```
 
 **Append to knowledge base:**
@@ -1171,7 +1171,7 @@ Then append the entry:
 
 Commit the knowledge base update alongside the resolved session:
 ```bash
-node "/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/bin/gsd-tools.cjs" commit "docs: update debug knowledge base with {slug}" --files .planning/debug/knowledge-base.md
+node "/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/bin/gsd-tools.cjs" commit "docs: update debug knowledge base with {slug}" --files .planning/debug/knowledge-base.md
 ```
 
 Report completion and offer next steps.

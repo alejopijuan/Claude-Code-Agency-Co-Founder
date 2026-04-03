@@ -17,7 +17,7 @@ Purpose: Handle urgent work discovered during execution without renumbering enti
 </objective>
 
 <execution_context>
-@/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/workflows/insert-phase.md
+@/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/workflows/insert-phase.md
 </execution_context>
 
 <context>
@@ -27,6 +27,6 @@ Roadmap and state are resolved in-workflow via `init phase-op` and targeted tool
 </context>
 
 <process>
-Execute the insert-phase workflow from @/Users/alejopijuan/Projects/voice-ai-agency-ops-hub/.claude/get-shit-done/workflows/insert-phase.md end-to-end.
+Execute the insert-phase workflow from @/Users/alejopijuan/Projects/Claude-Code-Agency-Co-Founder/.claude/get-shit-done/workflows/insert-phase.md end-to-end.
 Preserve all validation gates (argument parsing, phase verification, decimal calculation, roadmap updates).
 </process>

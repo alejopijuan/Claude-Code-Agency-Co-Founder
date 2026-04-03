@@ -169,18 +169,48 @@ The user can do this live or come back with answers later. If they want to pause
 
 ## Stage 4: Retell Prompt Creation (15-20 minutes)
 
-This is the deep work. Read the appropriate prompt engineering reference:
-- If client uses Retell (default/recommended): Read `references/prompt-engineering-retell.md`
-- If client uses ElevenLabs: Read `references/prompt-engineering-elevenlabs.md`
+This is the deep work.
 
-**Retell prompt creation flow:**
+### Step 1: Model Selection
+
+Ask the user which LLM model their voice agent will run on using `AskUserQuestion`:
+
+"Which model is this voice agent running on?"
+- GPT 4.1
+- GPT 5.1 (recommended for new agents)
+- Not sure (I'll use GPT 5.1 best practices by default)
+
+### Step 2: Load Model-Specific Reference
+
+Based on model selection, read the appropriate prompt engineering reference:
+- GPT 4.1: Read `references/prompt-engineering-gpt41.md`
+- GPT 5.1: Read `references/prompt-engineering-gpt51.md`
+- If client uses ElevenLabs instead of Retell: Also read `references/prompt-engineering-elevenlabs.md`
+
+Key differences to apply:
+- **GPT 4.1:** Markdown headers for structure, explicit instructions (model follows literally)
+- **GPT 5.1:** XML-tagged sections, contradiction sensitivity, no motivational filler, no vague brevity instructions, semantic priming awareness, stage ordering guards
+
+### Step 3: Create the Prompt
+
 1. Read the corresponding system prompt template: `templates/voice-agents/retell-prompts/inbound-system-prompt.md` (for inbound) or `templates/voice-agents/retell-prompts/outbound-system-prompt.md` (for S2L/DBR)
 2. Replace all {{VARIABLES}} with the client's specific information from Stages 2-3
-3. Follow the GPT 4.1 prompt structure: Role and Objective, Personality, Context, Instructions, Stages, Example Interactions
+3. Follow the model-specific prompt structure from the reference
 4. Include all voice agent best practices from the reference: one question at a time, symbol formatting, spelling rules, function integration, jailbreak protection
 5. Keep under 2000 tokens excluding knowledge base content
 6. Show the completed prompt to the user for review
 7. Ask: "Want to adjust anything -- the tone, the greeting, the transfer rules, or the FAQ answers?"
+
+### Step 4: Prompt Trimming (if needed)
+
+After the prompt is finalized, estimate the token count:
+- Count words in the prompt (excluding Knowledge Base section)
+- Multiply by 1.33 to estimate tokens
+
+If the prompt exceeds 3,500 tokens (or 2,000 for tighter builds), offer trimming:
+"Your prompt is estimated at ~X tokens. Want me to run the prompt trimming flow? I'll propose three tiers of cuts (conservative, moderate, aggressive) and you pick what feels right."
+
+If yes, run the `/agency-ops:prompt-trim` flow inline -- same logic, same tiers, same model-specific validation. The trimmed prompt replaces the original before saving in Stage 5.
 
 **Retell config guidance:**
 Point the user to `templates/voice-agents/retell-configs/` for the appropriate config template (inbound or outbound). Explain that they need to:

@@ -10,13 +10,17 @@ entry_count: 0
 > Review during your weekly review or when you're ready to customize.
 
 ## Dashboard Ideas
+
 <!-- Ideas related to dashboard layout, charts, metrics, visual changes -->
 
 ## Skill Ideas
+
 <!-- Ideas for new skills, skill modifications, output format changes -->
 
 ## Workflow Ideas
+
 <!-- Ideas for new SOPs, process changes, automation improvements -->
 
 ## Parked
+
 <!-- Ideas reviewed and intentionally deferred -- not forgotten, just not now -->

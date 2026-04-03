@@ -1,11 +1,11 @@
 ---
-skill: 
+skill: prompt-trim
 last_updated: null
 entry_count: 0
 max_entries: 30
 ---
 
-# Learnings: 
+# Learnings: Prompt Trim
 
 ## Preferences
 <!-- Stable learnings that rarely change (e.g., output format preferences, #style, #process) -->
